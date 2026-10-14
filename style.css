@@ -22,3 +22,11 @@ h1 {
     text-align: center;
     margin: 100px 0 30px 0;
 }
+
+/* 針對手機螢幕（螢幕寬度 768px 以下）的修正 */
+@media screen and (max-width: 768px) {
+    body {
+        background-position: center top; /* 改回從上方或置中開始，避免手機上 250px 跑版 */
+        background-attachment: fixed;  /* 讓背景固定，避免手機捲動時重複渲染 */
+    }
+}
