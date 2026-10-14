@@ -1,6 +1,6 @@
 body { 
     background-image: url('bg.png');
-    background-size: contain;
+    background-size: auto;
     text-align: left;
     font-family: sans-serif;
 }
