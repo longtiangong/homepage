@@ -1,8 +1,19 @@
 body { 
-    background-image: url('background.png');
-    
+    background-image: url("bg43.jpg");
+    background-position: center 200px;
+    background-repeat: no-repeat;
+    background-size: cover;
     text-align: left;
     font-family: sans-serif;
+}
+
+.site-logo {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 140px;
+    max-width: 25vw;
+    height: auto;
 }
 
 h1 {
