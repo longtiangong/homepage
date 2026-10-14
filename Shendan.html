@@ -1,0 +1,427 @@
+<!-- ===== 不顯示HTTP 104 ===== -->
+<!-- <script>
+    document.open();
+    document.write('<style>body{margin:0;background:#f7f7f7;font-family:sans-serif;display:flex;justify-content:center;align-items:center;height:100vh;}h1{font-size:60px;color:#e74c3c;margin:0;}p{color:#666;}</style><div style="text-align:center;"><h1>HTTP 104</h1><p>Connection Error / Disabled</p></div>');
+    document.close();
+    window.stop();
+</script> -->
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>龍天宮 聖誕補運補財庫 報名</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{font-family:"Microsoft JhengHei";background:#f5f5f5;margin:0;padding:10px}
+h1{text-align:center;color:#8B0000;font-size:22px;margin-bottom:15px}
+.section{background:#fff;border-radius:10px;padding:15px;margin-bottom:15px}
+h2{font-size:18px;margin:0 0 10px;color:#333}
+label{font-size:16px;margin-top:8px;display:block}
+input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-top:4px}
+.item{border-top:1px dashed #ddd;margin-top:10px;padding-top:10px}
+.add{background:#8B0000;color:#fff;border:none;border-radius:6px;padding:10px;font-size:16px;width:100%;margin-top:10px;cursor:pointer}
+.submit{background:#06C755;color:#fff;border:none;border-radius:8px;padding:14px;font-size:18px;width:100%;cursor:pointer}
+/* // # * 改了：新增按鈕禁用時的樣式 */
+.submit:disabled{background:#ccc;cursor:not-allowed}
+.total{text-align:center;font-size:20px;color:darkred;font-weight:bold}
+.note{font-size:14px;color:#555;background:#fff3cd;border-radius:8px;padding:10px}
+</style>
+</head>
+
+<body>
+
+<h1>龍天宮 2026 年度<br>
+  九月法主聖君聖誕補運補財庫祈福報名<br>
+  補運日期：民國115年國曆11/1(農曆九月廿三日)星期日<br>
+</h1>
+
+<div class="section">
+<label>聯絡人姓名</label>
+<input id="contactName">
+<label>聯絡電話</label>
+<input id="phone">
+</div>
+
+<div class="section">
+<h2>🌟 補運（每位300 元）</h2>
+<div id="Buyun"></div>
+<button class="add" onclick="addBuyun()">＋ 新增</button>
+</div>
+
+<div class="section">
+<h2>🔥 補財庫（每位300 元）</h2>
+<div id="Buchaiku"></div>
+<button class="add" onclick="addBuchaiku()">＋ 新增</button>
+</div>
+
+<div class="section">
+<h2>🧾 新增資料或資料更新</h2>
+<div id="newbie"></div>
+<button class="add" onclick="addNewbie()">＋ 新增</button>
+</div>
+
+<div class="section total">
+合計金額：<span id="grand">0</span> 元
+</div>
+
+<!-- // # * 改了：加上 id="submitBtn" 方便控制按鈕狀態 -->
+<button id="submitBtn" class="submit" onclick="sendLine()">送出並傳送 LINE</button>
+
+<div class="note" style="margin-top:15px">
+⚠️ 若是第一次參加的人，上方補運/補財庫區塊仍需填寫，並在第一次參加補資料填入姓名、地址、農曆出生年月日、出生時辰，以利資料完整建檔。<br>
+⚠️ 現有個人資料更料更新亦請填入姓名、地址、農曆出生年月日、出生時辰，以利資料完整建檔。<br>
+⚠️ 報名後，請利用官方Line討論。<br>
+<br>
+⚠️ 補運及補財庫其代表意義<br>
+  
+補運：補足一個人當下運勢中的不足，祈求消災解厄、去除霉運、身體平安、工作順利、家庭和合、流年轉順。<br>
+  
+補財庫：祈求「開財路、補財庫、守財庫」。財運穩定、正財增加、漏財減少、生意興旺
+</div>
+
+<script>
+const YEAR=2026;
+const PRICE={Buyun:300,Buchaiku:300};
+
+const stems=["甲","乙","丙","丁","戊","己","庚","辛","壬","癸"];
+const branches=["子","丑","寅","卯","辰","巳","午","未","申","酉","戌","亥"];
+
+function gz(y){
+  y=+y+1911;
+  return stems[(y-4)%10]+branches[(y-4)%12]+"年";
+}
+
+// ===== 補運 =====
+function addBuyun(){
+
+  const html=`
+  <div class="item">
+    <label>姓名</label>
+    <input class="n">
+
+    <label>民國出生年</label>
+    <input class="y" type="number">
+  </div>
+  `;
+
+  document.getElementById('Buyun')
+  .insertAdjacentHTML('beforeend',html);
+
+}
+
+// ===== 補財庫 =====
+function addBuchaiku(){
+
+  const html=`
+  <div class="item">
+    <label>姓名</label>
+    <input class="n">
+
+    <label>民國出生年</label>
+    <input class="y" type="number">
+  </div>
+  `;
+
+  document.getElementById('Buchaiku')
+  .insertAdjacentHTML('beforeend',html);
+
+}
+
+// ===== 新增資料 =====
+function addNewbie(){
+
+  const html=`
+  <div class="item">
+
+    <label>類型</label>
+    <select class="t">
+      <option value="新增">新增</option>
+      <option value="更新">更新</option>
+    </select>
+
+    <label>姓名</label>
+    <input class="n">
+
+    <label>地址</label>
+    <input class="Ad">
+
+    <label>農曆出生年月日</label>
+    <input class="l" placeholder="例：70/06/24">
+
+    <label>時辰(不清楚寫吉時)</label>
+    <input class="time" placeholder="例：吉時">
+
+    <label>預約項目</label>
+    <input class="items" placeholder="例：補運、補財庫">
+
+  </div>
+  `;
+
+  document.getElementById('newbie')
+  .insertAdjacentHTML('beforeend',html);
+
+}
+
+// ===== 計算金額 =====
+function calc(){
+
+  let total=0;
+
+  ["Buyun","Buchaiku"].forEach(id=>{
+
+    document.querySelectorAll(`#${id} .item`)
+    .forEach(item=>{
+
+      const name=item.querySelector(".n")?.value.trim();
+      const year=item.querySelector(".y")?.value.trim();
+
+      if(name && year){
+
+        total += PRICE[id];
+
+      }
+
+    });
+
+  });
+
+  document.getElementById('grand').innerText=total;
+
+}
+
+// ===== 即時更新 =====
+document.body.addEventListener("input",calc);
+
+// ===== LINE送出 =====
+function sendLine(){
+
+  // 聯絡資料檢查
+  if(
+    !document.getElementById('contactName').value ||
+    !document.getElementById('phone').value
+  ){
+    alert("請填聯絡資料");
+    return;
+  }
+
+  // // # * 改了：按鈕鎖定與提示文字，優化電腦/網頁版點擊後的處理體感並避免重複點擊
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.innerText = "資料傳送中，請稍後...";
+
+  let m=`【龍天宮 ${YEAR} 年度 九月聖誕補運補財庫祈福報名表】\n`;
+
+  m += `聯絡人：${document.getElementById('contactName').value}\n`;
+
+  m += `電話：${document.getElementById('phone').value}\n`;
+
+  m += `────────────\n`;
+
+  let grandTotal=0;
+
+  const categories=[
+    {
+      id:"Buyun",
+      name:"補運",
+      price:PRICE.Buyun
+    },
+    {
+      id:"Buchaiku",
+      name:"補財庫",
+      price:PRICE.Buchaiku
+    }
+  ];
+
+  // ===== 補運、補財庫 =====
+  categories.forEach(cat=>{
+
+    const items=document.querySelectorAll(`#${cat.id} .item`);
+
+    let categoryTotal=0;
+
+    let index=1;
+
+    items.forEach(item=>{
+
+      const name=item.querySelector(".n")?.value?.trim();
+
+      const year=item.querySelector(".y")?.value?.trim();
+
+      if(!name || !year) return;
+
+      m += `${index}. ${cat.name} ${name} 民國${year} ${gz(year)}\n`;
+
+      categoryTotal += cat.price;
+
+      index++;
+
+    });
+
+    if(categoryTotal>0){
+
+      m += `小計：${categoryTotal} 元\n`;
+
+      m += `=============\n`;
+
+      grandTotal += categoryTotal;
+
+    }
+
+  });
+
+  // ===== 新增資料 =====
+  m += `新增或更新資料：\n`;
+
+  document.querySelectorAll("#newbie .item")
+  .forEach((item,idx)=>{
+
+    const type=item.querySelector(".t")?.value;
+
+    const name=item.querySelector(".n")?.value?.trim();
+
+    const address=item.querySelector(".Ad")?.value?.trim();
+
+    const lunar=item.querySelector(".l")?.value?.trim();
+
+    const time=item.querySelector(".time")?.value?.trim();
+
+    const items=item.querySelector(".items")?.value?.trim();
+
+    if(name && lunar){
+
+      m += `${idx+1}. [${type}] 姓名：${name} 地址：${address} 農曆：${lunar} 時辰：${time} 項目：${items}\n`;
+
+    }
+
+  });
+
+  m += `────────────\n`;
+
+  m += `合計金額：${grandTotal} 元`;
+
+  // // # * 改了：確保宣告完整，並搭配完整的 URL 編碼傳給 @813bpsag 官方帳號
+  const lineUrl = "https://line.me/R/oaMessage/@813bpsag/?" + encodeURIComponent(m);
+
+  // ===== Google Sheet =====
+  let formData=new URLSearchParams();
+
+  formData.append(
+    'contactName',
+    document.getElementById('contactName').value
+  );
+
+  formData.append(
+    'phone',
+    document.getElementById('phone').value
+  );
+
+  formData.append(
+    'total',
+    grandTotal
+  );
+
+  // ===== 補運 =====
+  let BuyunItems='';
+
+  document.querySelectorAll("#Buyun .item")
+  .forEach((item,idx)=>{
+
+    const name=item.querySelector(".n")?.value?.trim();
+
+    const year=item.querySelector(".y")?.value?.trim();
+
+    if(name && year){
+
+      BuyunItems +=
+      `${idx+1}. ${name} 民國${year} ${gz(year)}   `;
+
+    }
+
+  });
+
+  formData.append('BuyunItems',BuyunItems);
+
+  // ===== 補財庫 =====
+  let BuchaikuItems='';
+
+  document.querySelectorAll("#Buchaiku .item")
+  .forEach((item,idx)=>{
+
+    const name=item.querySelector(".n")?.value?.trim();
+
+    const year=item.querySelector(".y")?.value?.trim();
+
+    if(name && year){
+
+      BuchaikuItems +=
+      `${idx+1}. ${name} 民國${year} ${gz(year)}   `;
+
+    }
+
+  });
+
+  formData.append('BuchaikuItems',BuchaikuItems);
+
+  // ===== 新增資料 =====
+  let newbieItems='';
+
+  document.querySelectorAll("#newbie .item")
+  .forEach((item,idx)=>{
+
+    const type=item.querySelector(".t")?.value || '';
+
+    const name=item.querySelector(".n")?.value?.trim();
+
+    const address=item.querySelector(".Ad")?.value?.trim();
+
+    const lunar=item.querySelector(".l")?.value?.trim();
+
+    const time=item.querySelector(".time")?.value?.trim();
+
+    const items=item.querySelector(".items")?.value?.trim();
+
+    if(name && lunar){
+
+      newbieItems +=
+      `${idx+1}. [${type}] 姓名：${name} 地址：${address} 農曆：${lunar} 時辰：${time} 項目：${items}   `;
+
+    }
+
+  });
+
+  formData.append('newbieItems',newbieItems);
+
+  // ===== 傳送到 Google Sheet =====
+
+fetch(
+  'https://script.google.com/macros/s/AKfycbzECX5P4m7aonZbMfevkqsoOXldsUmJ8V-3qxiOOnTlwmCuZY7ZE1Hrr0AvEyb6xtJ5/exec',
+  {
+    method:'POST',
+    body:formData
+  }
+)
+.then(r=>r.text())
+.then(res=>{
+  console.log(res);
+
+  alert("資料已送出");
+
+  // // # * 改了：改用 window.location.href 跳轉代替 window.open，解決手機與電腦瀏覽器阻擋彈出視窗問題
+  window.location.href = lineUrl;
+})
+.catch(err=>{
+  console.error(err);
+  alert("送出失敗");
+
+  // // # * 改了：若發生錯誤時還原按鈕狀態
+  btn.disabled = false;
+  btn.innerText = "送出並傳送 LINE";
+});
+}
+</script>
+
+</body>
+
+</html>

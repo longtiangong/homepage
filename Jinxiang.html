@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>龍天宮 進香 手機報名</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{font-family:"Microsoft JhengHei";background:#f5f5f5;margin:0;padding:10px}
+h1{text-align:center;color:#8B0000;font-size:22px;margin-bottom:15px}
+.section{background:#fff;border-radius:10px;padding:15px;margin-bottom:15px}
+h2{font-size:18px;margin:0 0 10px;color:#333}
+label{font-size:16px;margin-top:8px;display:block}
+input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-top:4px}
+.item{border-top:1px dashed #ddd;margin-top:10px;padding-top:10px}
+.add{background:#8B0000;color:#fff;border:none;border-radius:6px;padding:10px;font-size:16px;width:100%;margin-top:10px;cursor:pointer}
+.submit{background:#06C755;color:#fff;border:none;border-radius:8px;padding:14px;font-size:18px;width:100%;cursor:pointer}
+.total{text-align:center;font-size:20px;color:darkred;font-weight:bold}
+.note{font-size:14px;color:#555;background:#fff3cd;border-radius:8px;padding:10px}
+</style>
+</head>
+
+<body>
+
+<h1>龍天宮 2026 年度<br>
+  九月進香報名<br>
+  補運日期：民國115年國曆十月三日(農曆八月廿三日)星期日<br>
+</h1>
+
+<div class="section">
+<label>聯絡人姓名</label>
+<input id="contactName">
+<label>聯絡電話</label>
+<input id="phone" type="tel">
+</div>
+
+<div class="section">
+<h2>🚩 進香（每人1300 元）</h2>
+<div id="Jinxiang"></div>
+<button class="add" onclick="addJinxiang()">＋ 新增</button>
+</div>
+
+<div class="section">
+<h2>🧾 新增資料或資料更新</h2>
+<div id="newbie"></div>
+<button class="add" onclick="addNewbie()">＋ 新增</button>
+</div>
+
+<div class="section total">
+合計金額：<span id="grand">0</span> 元
+</div>
+
+<button class="submit" onclick="sendLine()">送出並傳送 LINE</button>
+
+<div class="note" style="margin-top:15px">
+⚠️ 進香宮廟<br>
+蘭陽白天宮。<br>
+</div>
+
+<script>
+const YEAR=2026;
+const PRICE={Jinxiang:1300};
+
+// 修正：第四個字改回「丁」
+const stems=["甲","乙","丙","丁","戊","己","庚","辛","壬","癸"];
+const branches=["子","丑","寅","卯","辰","巳","午","未","申","酉","戌","亥"];
+
+function gz(y){
+  y=+y+1911;
+  return stems[(y-4)%10]+branches[(y-4)%12]+"年";
+}
+
+// ===== 進香 =====
+// 修正：函數名稱全部改為小寫 x 的 addJinxiang
+function addJinxiang(){
+
+const html=`
+  <div class="item">
+    <label>姓名</label>
+    <input class="n">
+
+    <label>民國出生年</label>
+    <input class="y" type="number">
+
+    <label>國曆出生年月日</label>
+    <input class="B" type="text" placeholder="例：065/06/18">
+
+    <label>身份證字號</label>
+    <input class="I" 
+       type="text" 
+       placeholder="例：A121666888" 
+       pattern="[A-Z][1-2][0-9]{8}" 
+       maxlength="10" 
+       oninput="this.value = this.value.toUpperCase();"
+       required>
+  </div>
+  `;
+
+document.getElementById('Jinxiang').insertAdjacentHTML('beforeend',html);
+}
+
+// ===== 新增資料 =====
+function addNewbie(){
+
+  const html=`
+  <div class="item">
+    <label>類型</label>
+    <select class="t">
+      <option value="新增">新增</option>
+      <option value="更新">更新</option>
+    </select>
+
+    <label>姓名</label>
+    <input class="n">
+
+    <label>地址</label>
+    <input class="Ad">
+
+    <label>國曆出生年月日</label>
+    <input class="NBD" placeholder="例：070/06/24">
+
+    <label>身份證號碼</label>
+    <input class="NID" 
+       type="text" 
+       placeholder="例：A121666888" 
+       pattern="[A-Z][1-2][0-9]{8}" 
+       maxlength="10" 
+       oninput="this.value = this.value.toUpperCase();"
+       required>
+  </div>
+  `;
+
+  document.getElementById('newbie').insertAdjacentHTML('beforeend',html);
+}
+
+// ===== 計算金額 =====
+function calc(){
+  let total=0;
+
+  ["Jinxiang"].forEach(id=>{
+    document.querySelectorAll(`#${id} .item`).forEach(item=>{
+      const name=item.querySelector(".n")?.value.trim();
+      const year=item.querySelector(".y")?.value.trim();
+
+      if(name && year){
+        total += PRICE[id];
+      }
+    });
+  });
+
+  document.getElementById('grand').innerText=total;
+}
+
+// ===== 即時更新 =====
+document.body.addEventListener("input",calc);
+
+// ===== LINE送出 =====
+function sendLine(){
+
+  // 先重新計算
+  calc();
+
+  // 聯絡資料檢查
+  if(
+    !document.getElementById('contactName').value ||
+    !document.getElementById('phone').value
+  ){
+    alert("請填聯絡資料");
+    return;
+  }
+
+  let m=`【龍天宮 ${YEAR} 年度 九月進香報名表】\n`;
+  m += `聯絡人：${document.getElementById('contactName').value}\n`;
+  m += `電話：${document.getElementById('phone').value}\n`;
+  m += `────────────\n`;
+
+  let grandTotal = Number(document.getElementById('grand').innerText);
+
+  // ===== 進香 =====
+  let categoryTotal = 0;
+  let index = 1;
+
+  document.querySelectorAll("#Jinxiang .item").forEach(item=>{
+    const name=item.querySelector(".n")?.value?.trim();
+    const year=item.querySelector(".y")?.value?.trim();
+    // 修正：Class 名稱要跟 HTML 模板對齊 (.B 與 .I)
+    const BD=item.querySelector(".B")?.value?.trim() || '無';
+    const TWID=item.querySelector(".I")?.value?.trim() || '無';
+
+    if(!name || !year) return;
+
+    m += `${index}. 進香 ${name} 民國${year}年(${gz(year)}) 國曆生日:${BD} 身分證:${TWID}\n`;
+    categoryTotal += PRICE.Jinxiang;
+    index++;
+  });
+
+  if(categoryTotal>0){
+    m += `小計：${categoryTotal} 元\n`;
+    m += `=============\n`;
+  }
+
+  // ===== 新增資料 =====
+  m += `新增或更新資料：\n`;
+
+  document.querySelectorAll("#newbie .item").forEach((item,idx)=>{
+    const type=item.querySelector(".t")?.value;
+    const name=item.querySelector(".n")?.value?.trim();
+    const address=item.querySelector(".Ad")?.value?.trim();
+    const Calendar=item.querySelector(".NBD")?.value?.trim();
+    const ID=item.querySelector(".NID")?.value?.trim();
+    
+    if(name){
+      m += `${idx+1}. [${type}] 姓名：${name} 地址：${address} 國曆：${Calendar} 身份證：${ID}\n`;
+    }
+  });
+
+  m += `────────────\n`;
+  m += `合計金額：${grandTotal} 元`;
+
+  // ===== LINE URL =====
+  const lineUrl= "https://line.me/R/oaMessage/@813bpsag/?" + encodeURIComponent(m);
+
+  // ===== Google Sheet =====
+  let formData=new URLSearchParams();
+  formData.append('contactName', document.getElementById('contactName').value);
+  formData.append('phone', document.getElementById('phone').value);
+  formData.append('total', grandTotal);
+
+  // ===== 進香 =====
+  let JinxiangItems='';
+  document.querySelectorAll("#Jinxiang .item").forEach((item,idx)=>{
+    const name=item.querySelector(".n")?.value?.trim();
+    const year=item.querySelector(".y")?.value?.trim();
+    // 修正：這裡的 Class 也要同步修正為 .B 與 .I
+    const BD=item.querySelector(".B")?.value?.trim() || '無';
+    const TWID=item.querySelector(".I")?.value?.trim() || '無';
+
+    if(name && year){
+      JinxiangItems += `${idx+1}. ${name} 民國${year} ${gz(year)} 生日:${BD} 身份證:${TWID} ｜ `;
+    }
+  });
+  formData.append('JinxiangItems',JinxiangItems);
+
+  // ===== 新增資料 =====
+  let newbieItems='';
+  document.querySelectorAll("#newbie .item").forEach((item,idx)=>{
+    const type=item.querySelector(".t")?.value || '';
+    const name=item.querySelector(".n")?.value?.trim();
+    const address=item.querySelector(".Ad")?.value?.trim();
+    const Calendar=item.querySelector(".NBD")?.value?.trim();
+    const ID=item.querySelector(".NID")?.value?.trim();
+
+    if(name){
+      newbieItems += `${idx+1}. [${type}] 姓名：${name} 地址：${address} 國曆：${Calendar} 身份證：${ID}  ｜ `;
+    }
+  });
+  formData.append('newbieItems',newbieItems);
+
+  // ===== 傳送到 Google Sheet =====
+  fetch(
+    'https://script.google.com/macros/s/AKfycbyHraQ_qgvG-HSK1SnsBZJe13NvpcTlbrCCnaHDUm83uKNzYYNtVT2xhWo8F2y71Bjd/exec',
+    {
+      method:'POST',
+      body:formData
+    }
+  )
+  .then(r=>r.text())
+  .then(res=>{
+    console.log(res);
+    alert("資料已送出");
+    window.open(lineUrl,'_blank');
+  })
+  .catch(err=>{
+    console.error(err);
+    alert("送出失敗");
+  });
+}
+
+// 預設先新增一筆
+addJinxiang();
+addNewbie();
+</script>
+
+</body>
+</html>
