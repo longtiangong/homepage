@@ -281,8 +281,8 @@ function addNewbie(){
 
 function calc(){
   let t=0;
-  // 僅計算 light, taisui, jigai, peace6T, peace5T, peace3T, peace1T七個區塊
-  ["light","taisui","peace6T","peace5T","peace3T","peace1T"].forEach(id=>{
+  // 僅計算 light, taisui, peace5M, peace6T, peace5T, peace3T, peace1T七個區塊
+  ["light","taisui","peace5M","peace6T","peace5T","peace3T","peace1T"].forEach(id=>{
     document.querySelectorAll(`#${id} .item`).forEach(i=>{
       // 只要姓名與年份有填，就計費
       if(i.querySelector(".n")?.value.trim() && i.querySelector(".y")?.value.trim()) {
@@ -313,7 +313,7 @@ function sendLine(){
   const categories = [
     { id: "light",   name: "光明燈",   price: PRICE.light   },
     { id: "taisui",  name: "太歲",     price: PRICE.taisui  },
-    // { id: "jigai",   name: "祭改",     price: PRICE.jigai   },
+    { id: "peace5M", name: "五大主斗", price: PRICE.peace5M },
     { id: "peace6T", name: "平安年斗6000元", price: PRICE.peace6T },
     { id: "peace5T", name: "平安年斗5000元", price: PRICE.peace5T },
     { id: "peace3T", name: "平安年斗3000元", price: PRICE.peace3T },
