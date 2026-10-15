@@ -15,7 +15,7 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<title>龍天宮 2026 手機報名</title>
+<title>龍天宮 光明燈太歲年斗報名</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -46,8 +46,8 @@ border-radius:8px;
 font-size:18px;
 }
 </style>
-<h1>龍天宮 2026 年度<br>
-  祈福報名<br>
+<h1>龍天宮 民國116(2027)年度<br>
+  光明燈太歲年斗 報名<br>
   祭改日期：民國115年國曆二月八日(農曆十二月廿一日)星期日<br>
   開燈、開斗日期：民國115年國曆二月廿二日(農曆正月初六日)星期日<br>
 </h1>
@@ -71,11 +71,11 @@ font-size:18px;
 <button class="add" onclick="addSimple('taisui')">＋ 新增</button>
 </div>
 
-<div class="section">
+<!-- <div class="section">
 <h2>🔥 祭改（300 元）</h2>
 <div id="jigai"></div>
 <button class="add" onclick="addSimple('jigai')">＋ 新增</button>
-</div>
+</div> -->
 
 <div class="section">
 <h2>🌟 五大主斗 </h2>
@@ -141,7 +141,7 @@ font-size:18px;
 
 <script>
 const YEAR=2026;
-const PRICE={light:300,taisui:300,jigai:300,peace6T:6000,peace5T:5000,peace3T:3000,peace1T:1000};
+const PRICE={light:300,taisui:300,peace6T:6000,peace5T:5000,peace3T:3000,peace1T:1000};
 const stems=["甲","乙","丙","丁","戊","己","庚","辛","壬","癸"];
 const branches=["子","丑","寅","卯","辰","巳","午","未","申","酉","戌","亥"];
 
@@ -282,7 +282,7 @@ function addNewbie(){
 function calc(){
   let t=0;
   // 僅計算 light, taisui, jigai, peace6T, peace5T, peace3T, peace1T七個區塊
-  ["light","taisui","jigai","peace6T","peace5T","peace3T","peace1T"].forEach(id=>{
+  ["light","taisui","peace6T","peace5T","peace3T","peace1T"].forEach(id=>{
     document.querySelectorAll(`#${id} .item`).forEach(i=>{
       // 只要姓名與年份有填，就計費
       if(i.querySelector(".n")?.value.trim() && i.querySelector(".y")?.value.trim()) {
@@ -303,7 +303,7 @@ function sendLine(){
     return;
   }
 
-  let m = `【龍天宮 ${YEAR} 年度 祈福報名表】\n`;
+  let m = `【龍天宮 ${YEAR} 年度 光明燈太歲年斗 報名表】\n`;
   m += `聯絡人：${document.getElementById('contactName').value}\n`;
   m += `電話：${document.getElementById('phone').value}\n`;
   m += `────────────\n`;
@@ -313,7 +313,7 @@ function sendLine(){
   const categories = [
     { id: "light",   name: "光明燈",   price: PRICE.light   },
     { id: "taisui",  name: "太歲",     price: PRICE.taisui  },
-    { id: "jigai",   name: "祭改",     price: PRICE.jigai   },
+    // { id: "jigai",   name: "祭改",     price: PRICE.jigai   },
     { id: "peace6T", name: "平安年斗6000元", price: PRICE.peace6T },
     { id: "peace5T", name: "平安年斗5000元", price: PRICE.peace5T },
     { id: "peace3T", name: "平安年斗3000元", price: PRICE.peace3T },
@@ -407,15 +407,15 @@ m += `────────────\n`;
   });
   formData.append('taisuiItems', taisuiItems);
   
-  let jigaiItems = '';
-  document.querySelectorAll("#jigai .item").forEach((item, idx) => {
-    const name = item.querySelector(".n")?.value?.trim();
-    const year = item.querySelector(".y")?.value?.trim();
-    if (name && year) {
-      jigaiItems += `${idx+1}. ${name} 民國${year} ${gz(year)}   `;
-    }
-  });
-  formData.append('jigaiItems', jigaiItems);
+  // let jigaiItems = '';
+  // document.querySelectorAll("#jigai .item").forEach((item, idx) => {
+  //   const name = item.querySelector(".n")?.value?.trim();
+  //   const year = item.querySelector(".y")?.value?.trim();
+  //   if (name && year) {
+  //     jigaiItems += `${idx+1}. ${name} 民國${year} ${gz(year)}   `;
+  //   }
+  // });
+  // formData.append('jigaiItems', jigaiItems);
 
   let peace5MItems = '';
   document.querySelectorAll("#peace5M .item").forEach((item, idx) => {
@@ -461,7 +461,7 @@ m += `────────────\n`;
   });
   formData.append('newbieItems', newbieItems);
 
-  fetch('https://script.google.com/macros/s/AKfycbzz7IzK36S7u_Re9mF8UdKm8AV1H7jk1tWGR9ODfU-lpq6_yctrhzdmyBwetRNoOyQdgg/exec', {
+  fetch('https://script.google.com/macros/s/AKfycbxJr-8sTSbcVEE7IwUNzoR2WiiT2OL7jp2BIcCeKzVAHUtDxQZfqReHsrCXZCGOXoEC8g/exec', {
     method: 'POST',
     body: formData
   })
