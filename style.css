@@ -55,20 +55,19 @@ h1 {
     position: relative;
     flex: 1;
     align-self: stretch;
+    min-width: 0;
+    min-height: 42px;
     overflow: hidden;
 }
 
 .announcement-text {
+    display: block;
     position: absolute;
     top: 50%;
     left: 100%;
     width: max-content;
     white-space: nowrap;
-    animation: announcement-scroll 20s linear infinite;
-}
-
-.announcement:hover .announcement-text {
-    animation-play-state: paused;
+    animation: announcement-scroll 12s linear infinite;
 }
 
 @keyframes announcement-scroll {
@@ -80,17 +79,5 @@ h1 {
     to {
         left: 0;
         transform: translate(-100%, -50%);
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .announcement-track {
-        padding: 10px 12px;
-    }
-
-    .announcement-text {
-        position: static;
-        white-space: normal;
-        animation: none;
     }
 }
