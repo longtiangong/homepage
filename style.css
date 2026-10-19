@@ -3,31 +3,6 @@ body {
     font-family: sans-serif;
 }
 
-.background-footer {
-    width: 100%;
-}
-
-.background-footer-image {
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    background-image: url("bg43.jpg");
-    background-position: center top;
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-}
-
-.footer-color-row {
-    height: 40px;
-}
-
-.background-footer footer {
-    margin: 0;
-    padding: 8px 12px;
-    background: #8B0000;
-    color: #D4AF37;
-    text-align: center;
-}
-
 .site-logo {
     position: absolute;
     top: 10px;
