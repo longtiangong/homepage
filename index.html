@@ -34,9 +34,64 @@
             background-color: #600000;
         }
 
+        .site-menu {
+            position: fixed;
+            top: 12px;
+            right: 16px;
+            z-index: 10;
+            font-size: 16px;
+        }
+
+        .site-menu > summary {
+            padding: 10px 16px;
+            border-radius: 6px;
+            background: #8B0000;
+            color: #fff;
+            cursor: pointer;
+            list-style: none;
+        }
+
+        .site-menu > summary::-webkit-details-marker,
+        .join-menu > summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .site-menu-items {
+            position: absolute;
+            top: calc(100% + 6px);
+            right: 0;
+            width: 220px;
+            padding: 6px 0;
+            border: 1px solid #8B0000;
+            border-radius: 6px;
+            background: #fff;
+            box-shadow: 0 4px 12px #0003;
+        }
+
+        .site-menu-items > a {
+            display: block;
+            padding: 9px 14px;
+            color: #600000;
+            text-decoration: none;
+        }
+
+        .site-menu-items > a:hover,
+        .site-menu-items > a:focus-visible {
+            background: #f5eaea;
+        }
+
+        .site-menu-items > a.menu-pending {
+            color: #777;
+        }
+
         @media screen and (max-width: 768px) {
             nav {
                 margin-top: 120px;
+            }
+
+            .site-menu {
+                top: 12px;
+                right: 12px;
             }
         }
     </style>
@@ -44,7 +99,20 @@
 <body>
     <img class="site-logo" src="logo.jpg" alt="中壢龍天宮 Logo">
 
-    <nav aria-label="主要導覽">
+    <details class="site-menu">
+        <summary>主要導覽</summary>
+        <div class="site-menu-items">
+            <a href="Yange.html">沿格</a>
+            <a href="Join.html">加入龍天宮</a>
+            <a href="OilLamp.html">油燈介紹</a>
+            <a href="Committee.html">管委會名單</a>
+            <a href="YearLeaders.html">值年爐主／副爐主</a>
+            <a href="https://longtiangong.github.io/god_blessing/" target="_blank" rel="noopener noreferrer">開基神明</a>
+            <a class="menu-pending" href="InternalAffairs.html" aria-label="宮內業務頁面已建立，庫存系統登入連結待設定">宮內業務（庫存系統）🔒</a>
+        </div>
+    </details>
+
+    <nav aria-label="活動連結">
         <span class="navigation-prompt">參加活動連結 👉</span>
         <a href="Jigai.html">祭改</a>
         <a href="Guangming.html">光明燈太歲年斗</a>
@@ -56,7 +124,7 @@
 
     <section aria-label="最新公告" style="display: grid; gap: 8px; margin: 70px auto 20px; max-width: 1000px;">
         <div style="display: flex; align-items: stretch; min-height: 44px; background: #8B0000; color: #fff;">
-            <strong style="display: flex; align-items: center; padding: 10px 12px; background: #600000; white-space: nowrap;">宮內活動公告</strong>
+            <strong style="display: flex; align-items: center; padding: 10px 12px; background: #359b35; white-space: nowrap;">宮內活動公告</strong>
             <marquee aria-label="丙午年十二正月祭改，祭改日：農曆十二月七日(116年國曆1/24)星期日" direction="left" scrollamount="5" style="flex: 1; min-width: 0; padding: 12px 8px; color: #fff;">
                 丙午年十二正月祭改，祭改日：農曆十二月七日(116年國曆1/24)星期日
             </marquee>
@@ -69,7 +137,7 @@
         </div>
     </section>
 
-    <h1>中壢龍天宮丁未年民國116年法會及進香相關活動（版本：2026.10.19.2）</h1>
+    <h1>中壢龍天宮丁未年民國116年法會及進香相關活動（版本：2026.10.19.3）</h1>
     <p>中壢龍天宮位於桃園市中壢區，為當地重要的宗教信仰中心。每年舉辦多場法會及相關活動，吸引眾多信徒參與。</p>
     
     <h2>法會活動</h2>
