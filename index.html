@@ -128,6 +128,38 @@
         }
         /* # * 11161445 新增社群媒體 結束 */
 
+        /* 新增聯絡資訊（地址導航與電話撥號） */
+        .contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 12px 24px;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.35);
+            font-size: 15px;
+        }
+
+        .contact-info a {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: 6px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #FFE89E !important;
+            text-decoration: none;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .contact-info a:hover,
+        .contact-info a:focus-visible {
+            background-color: rgba(212, 175, 55, 0.35);
+            color: #fff !important;
+            transform: translateY(-1px);
+        }
+
         @media screen and (max-width: 768px) {
             nav {
                 margin-top: 120px;
@@ -205,13 +237,13 @@
         <li>六月關聖帝君聖誕補運及補財庫<br>&emsp;&emsp;補運補財庫日：農曆六月十五日(國曆7/18)星期日<br>&emsp;&emsp;<a href="5Shendan_June.html">👉報名連結</a></li>
         <li>七月中元普度大會<br>&emsp;&emsp;普度日：農曆七月廿八日(國曆8/29)星期日<br>&emsp;&emsp;<a href="6Pudu.html">👉報名連結</a></li>
         <li>九月法主聖君聖誕補運及補財庫<br>&emsp;&emsp;補運補財庫日：農曆九月初四日(國曆10/3)星期日<br>&emsp;&emsp;<a href="8Shendan_September.html">👉報名連結</a></li>
-    </ul> <!-- 加上關閉標籤 -->
+    </ul>
 
     <h2>進香活動</h2>
     <ul>
         <li>二月南巡進香兩日<br>&emsp;&emsp;南巡進香日：農曆二月初六初七兩日(國曆3/13 & 3/14)星期六日<br>&emsp;&emsp;<a href="3Jinxiang_South.html">👉報名連結</a></li>
         <li>九月北巡進香一日<br>&emsp;&emsp;北巡進香日：農曆八月十一日(國曆9/11)星期六<br>&emsp;&emsp;<a href="7Jinxiang_North.html">👉報名連結</a></li>
-    </ul> <!-- 加上關閉標籤 -->
+    </ul>
     <!-- <h2>友宮拜訪</h2>
     <ul>
         <li>福仁慈惠堂<br>&emsp;&emsp;拜訪日：農曆十一月初四日(國曆12/3)星期日</li>
@@ -247,6 +279,17 @@
             </a>
         </div>
         <!-- # * 11161445 新增社群媒體 結束 -->
+
+        <!-- 地址導航與電話撥號 -->
+        <div class="contact-info" aria-label="宮廟聯絡資訊">
+            <a href="https://www.google.com/maps/search/?api=1&query=320桃園市中壢區月眉里圓光路一段582巷38號" target="_blank" rel="noopener noreferrer" aria-label="開啟地圖導航至中壢龍天宮">
+                <span>📍 地址：320桃園市中壢區月眉里圓光路一段582巷38號（點擊導航）</span>
+            </a>
+            <a href="tel:+886-3-498-7977" aria-label="撥打電話 03 498 7977">
+                <span>📞 電話：03 498 7977（點擊撥號）</span>
+            </a>
+        </div>
+
         Copyright © 2026 中壢龍天宮 All Rights Reserved.小祕書團隊[Design By CS]
     </footer>
 </body>
