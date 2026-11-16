@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<title>龍天宮 普度 手機報名</title>
+<title>龍天宮普度報名</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -19,8 +19,8 @@ input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-
 .total{text-align:center;font-size:20px;color:darkred;font-weight:bold}
 .note{font-size:14px;color:#555;background:#fff3cd;border-radius:8px;padding:10px}
 
-/* # * 11161055 時間未到時顯示倒數天數：倒數遮罩與主內容隱藏樣式 */
-#countdown-overlay {
+/* # * 11161325 網站自動開啟/關閉/截止時間：倒數遮罩、截止遮罩與表單預設隱藏樣式 */
+#countdown-overlay, #closed-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -28,7 +28,7 @@ input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-
   height: 100%;
   background: #f5f5f5;
   z-index: 9999;
-  display: flex;
+  display: none;
   justify-content: center;
   align-items: center;
   padding: 20px;
@@ -66,7 +66,7 @@ input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-
 
 <body>
 
-<!-- # * 11161055 時間未到時顯示倒數天數：倒數計時遮罩區塊 -->
+<!-- # * 11161325 網站自動開啟/關閉/截止時間：尚未開放時的倒數計時遮罩 -->
 <div id="countdown-overlay">
   <div class="countdown-box">
     <h1>龍天宮 民國116(2027)年度<br>七月普度報名</h1>
@@ -76,12 +76,21 @@ input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-
   </div>
 </div>
 
-<!-- # * 11161055 時間未到時顯示倒數天數：將原有表單包裹在 main-form 中 -->
+<!-- # * 11161325 網站自動開啟/關閉/截止時間：超過截止時間後的關閉遮罩 -->
+<div id="closed-overlay">
+  <div class="countdown-box">
+    <h1>龍天宮 民國116(2027)年度<br>七月普度報名</h1>
+    <p style="font-size:18px;color:#d9534f;margin:15px 0;font-weight:bold;">本期網路報名已截止</p>
+    <p style="font-size:14px;color:#777;margin-bottom:0;">如有疑問請洽廟方或透過官方 Line 聯絡</p>
+  </div>
+</div>
+
+<!-- # * 11161325 網站自動開啟/關閉/截止時間：報名表單主區塊 -->
 <div id="main-form">
 
 <h1>龍天宮 民國116(2027)年度<br>
   七月普度報名<br>
-  普度日期：民國115年國曆8/29(農曆七月廿八日)星期日<br>
+  普度日期：民國116年國曆8/29(農曆七月廿八日)星期日<br>
 </h1>
 
 <div class="section">
@@ -120,26 +129,41 @@ input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-
 
 </div>
 
-</div><!-- # * 11161055 時間未到時顯示倒數天數：main-form 結束 -->
+</div><!-- # * 11161325 網站自動開啟/關閉/截止時間：main-form 結束 -->
 
 <script>
-// # * 11161055 時間未到時顯示倒數天數：設定開放報名時間（請依需求修改 YYYY-MM-DDTHH:MM:SS）
-const OPEN_TIME = new Date("2027-07-19T08:00:00").getTime();
+// # * 11161325 網站自動開啟/關閉/截止時間：設定自動開啟與關閉/截止時間（格式：YYYY-MM-DDTHH:MM:SS+08:00）
+const OPEN_TIME  = new Date("2027-07-19T08:00:00+08:00").getTime();
+const CLOSE_TIME = new Date("2027-08-29T00:00:00+08:00").getTime();
 
-function checkOpenTime() {
-  const now = new Date().getTime();
-  const distance = OPEN_TIME - now;
-  const overlay = document.getElementById("countdown-overlay");
+// # * 11161325 網站自動開啟/關閉/截止時間：定時檢查目前時間並切換對應畫面
+function checkSiteSchedule() {
+  const now = Date.now();
+  const countdownOverlay = document.getElementById("countdown-overlay");
+  const closedOverlay = document.getElementById("closed-overlay");
   const mainForm = document.getElementById("main-form");
   const display = document.getElementById("countdown-display");
 
-  if (distance <= 0) {
-    overlay.style.display = "none";
-    mainForm.style.display = "block";
-    if (typeof countdownTimer !== "undefined") {
-      clearInterval(countdownTimer);
+  if (now > CLOSE_TIME) {
+    // 狀態 1：已超過關閉/截止時間 -> 關閉表單，顯示截止提示
+    countdownOverlay.style.display = "none";
+    mainForm.style.display = "none";
+    closedOverlay.style.display = "flex";
+    if (typeof scheduleTimer !== "undefined") {
+      clearInterval(scheduleTimer);
     }
+  } else if (now >= OPEN_TIME) {
+    // 狀態 2：已到開啟時間且尚未截止 -> 隱藏遮罩，自動開啟表單
+    countdownOverlay.style.display = "none";
+    closedOverlay.style.display = "none";
+    mainForm.style.display = "block";
   } else {
+    // 狀態 3：尚未到達開啟時間 -> 顯示倒數天數與時間
+    closedOverlay.style.display = "none";
+    mainForm.style.display = "none";
+    countdownOverlay.style.display = "flex";
+
+    const distance = OPEN_TIME - now;
     const days = Math.floor(distance / (1000 * 60 * 60 * 24));
     const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -148,9 +172,9 @@ function checkOpenTime() {
   }
 }
 
-// # * 11161055 時間未到時顯示倒數天數：立即執行並每秒更新倒數
-checkOpenTime();
-const countdownTimer = setInterval(checkOpenTime, 1000);
+// # * 11161325 網站自動開啟/關閉/截止時間：網頁載入立即執行並每秒更新狀態
+checkSiteSchedule();
+const scheduleTimer = setInterval(checkSiteSchedule, 1000);
 
 const YEAR=2026;
 const PRICE={Pudu:800};
