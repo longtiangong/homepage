@@ -14,10 +14,16 @@ label{font-size:16px;margin-top:8px;display:block}
 input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-top:4px}
 .item{border-top:1px dashed #ddd;margin-top:10px;padding-top:10px}
 .add{background:#8B0000;color:#fff;border:none;border-radius:6px;padding:10px;font-size:16px;width:100%;margin-top:10px;cursor:pointer}
+/* # *11161750 聯絡電話只限10碼，開頭要09：新增按鈕停用樣式 */
+.add:disabled{background:#ccc;cursor:not-allowed}
 .submit{background:#06C755;color:#fff;border:none;border-radius:8px;padding:14px;font-size:18px;width:100%;cursor:pointer}
 .submit:disabled{background:#ccc;cursor:not-allowed}
 .total{text-align:center;font-size:20px;color:darkred;font-weight:bold}
 .note{font-size:14px;color:#555;background:#fff3cd;border-radius:8px;padding:10px}
+
+/* # *11161750 聯絡電話只限10碼，開頭要09：電話提示與區塊鎖定樣式 */
+.phone-msg{font-size:14px;margin-top:6px;font-weight:bold}
+.section-locked{opacity:0.6}
 
 /* # * 11161325 網站自動開啟/關閉/截止時間：倒數遮罩、截止遮罩與表單預設隱藏樣式 */
 #countdown-overlay, #closed-overlay {
@@ -93,30 +99,35 @@ input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-
   普度日期：民國116年國曆8/29(農曆七月廿八日)星期日<br>
 </h1>
 
+<!-- # *11161750 聯絡電話只限10碼，開頭要09：加入電話限制屬性與即時提示訊息 -->
 <div class="section">
-<label>聯絡人姓名</label>
-<input id="contactName">
-<label>聯絡電話</label>
-<input id="phone">
+<label for="contactName">聯絡人姓名</label>
+<input id="contactName" type="text" placeholder="請輸入聯絡人姓名" required>
+<label for="phone">聯絡電話</label>
+<input id="phone" type="tel" maxlength="10" pattern="^09\d{8}$" title="請輸入以 09 開頭且共 10 碼的手機號碼" placeholder="例如：0912345678" required>
+<div id="phoneMsg" class="phone-msg" style="color:#d9534f;">※ 請先填寫聯絡人姓名與正確電話（09開頭共10碼），才能往下填寫</div>
 </div>
 
-<div class="section">
+<!-- # *11161750 聯絡電話只限10碼，開頭要09：預設鎖定下方區塊，待聯絡資料驗證通過後解鎖 -->
+<div class="section lockable-section section-locked">
 <h2>🚩 普度（每戶800 元）</h2>
 <div id="Pudu"></div>
-<button class="add" onclick="addPudu()">＋ 新增</button>
+<button class="add lockable-add" onclick="addPudu()" disabled>＋ 新增（請先完成上方聯絡資料）</button>
 </div>
 
-<div class="section">
+<!-- # *11161750 聯絡電話只限10碼，開頭要09：預設鎖定下方區塊，待聯絡資料驗證通過後解鎖 -->
+<div class="section lockable-section section-locked">
 <h2>🧾 新增資料或資料更新</h2>
 <div id="newbie"></div>
-<button class="add" onclick="addNewbie()">＋ 新增</button>
+<button class="add lockable-add" onclick="addNewbie()" disabled>＋ 新增（請先完成上方聯絡資料）</button>
 </div>
 
 <div class="section total">
 合計金額：<span id="grand">0</span> 元
 </div>
 
-<button id="submitBtn" class="submit" onclick="sendLine()">送出並傳送 LINE</button>
+<!-- # *11161750 聯絡電話只限10碼，開頭要09：預設停用送出按鈕，待聯絡資料驗證通過後解鎖 -->
+<button id="submitBtn" class="submit" onclick="sendLine()" disabled>請先完成上方聯絡資料</button>
 
 <div class="note" style="margin-top:15px">
 ⚠️ 若是第一次參加的人，上方普度區塊仍需填寫，並在第一次參加補資料填入姓名、地址、家中幾丁(男)幾口(女)，以利資料完整建檔。<br>
@@ -175,6 +186,69 @@ function checkSiteSchedule() {
 // # * 11161325 網站自動開啟/關閉/截止時間：網頁載入立即執行並每秒更新狀態
 checkSiteSchedule();
 const scheduleTimer = setInterval(checkSiteSchedule, 1000);
+
+// # *11161750 聯絡電話只限10碼，開頭要09：聯絡資料即時驗證與解鎖控制
+const phoneRegex = /^09\d{8}$/;
+const contactNameInput = document.getElementById('contactName');
+const phoneInput = document.getElementById('phone');
+const phoneMsg = document.getElementById('phoneMsg');
+
+function checkContactValidation() {
+  // 自動過濾掉電話中的非數字字元
+  phoneInput.value = phoneInput.value.replace(/\D/g, '');
+
+  const nameVal = contactNameInput.value.trim();
+  const phoneVal = phoneInput.value;
+  const isPhoneValid = phoneRegex.test(phoneVal);
+  const isAllValid = nameVal.length > 0 && isPhoneValid;
+
+  const lockableSections = document.querySelectorAll('.lockable-section');
+  const lockableAddBtns = document.querySelectorAll('.lockable-add');
+  const lockableFields = document.querySelectorAll('.lockable-section input, .lockable-section select');
+  const submitBtn = document.getElementById('submitBtn');
+
+  // 顯示電話格式即時提示
+  if (phoneVal.length === 0) {
+    phoneMsg.textContent = '※ 請先填寫聯絡人姓名與正確電話（09開頭共10碼），才能往下填寫';
+    phoneMsg.style.color = '#d9534f';
+  } else if (!phoneVal.startsWith('09')) {
+    phoneMsg.textContent = '❌ 聯絡電話必須以 09 開頭';
+    phoneMsg.style.color = '#d9534f';
+  } else if (phoneVal.length < 10) {
+    phoneMsg.textContent = `❌ 聯絡電話只限 10 碼（目前 ${phoneVal.length} 碼，還差 ${10 - phoneVal.length} 碼）`;
+    phoneMsg.style.color = '#d9534f';
+  } else if (nameVal.length === 0) {
+    phoneMsg.textContent = '✓ 電話格式正確，請再填寫「聯絡人姓名」即可往下填寫';
+    phoneMsg.style.color = '#e67e22';
+  } else {
+    phoneMsg.textContent = '✓ 聯絡資料確認無誤，請繼續往下填寫報名資料';
+    phoneMsg.style.color = '#06C755';
+  }
+
+  // 依據驗證結果解鎖或鎖定下方填寫區塊、預設欄位與按鈕
+  if (isAllValid) {
+    lockableSections.forEach(sec => sec.classList.remove('section-locked'));
+    lockableFields.forEach(field => field.disabled = false);
+    lockableAddBtns.forEach(btn => {
+      btn.disabled = false;
+      btn.textContent = '＋ 新增';
+    });
+    submitBtn.disabled = false;
+    submitBtn.textContent = '送出並傳送 LINE';
+  } else {
+    lockableSections.forEach(sec => sec.classList.add('section-locked'));
+    lockableFields.forEach(field => field.disabled = true);
+    lockableAddBtns.forEach(btn => {
+      btn.disabled = true;
+      btn.textContent = '＋ 新增（請先完成上方聯絡資料）';
+    });
+    submitBtn.disabled = true;
+    submitBtn.textContent = '請先完成上方聯絡資料';
+  }
+}
+
+contactNameInput.addEventListener('input', checkContactValidation);
+phoneInput.addEventListener('input', checkContactValidation);
 
 const YEAR=2026;
 const PRICE={Pudu:800};
@@ -287,12 +361,18 @@ function sendLine(){
   // 先重新計算
   calc();
 
-  // 聯絡資料檢查
-  if(
-    !document.getElementById('contactName').value ||
-    !document.getElementById('phone').value
-  ){
-    alert("請填聯絡資料");
+  // # *11161750 聯絡電話只限10碼，開頭要09：送出前再次驗證姓名與電話格式
+  const contactNameVal = document.getElementById('contactName').value.trim();
+  const phoneVal = document.getElementById('phone').value.trim();
+
+  if(!contactNameVal || !phoneVal){
+    alert("請填寫聯絡人姓名與聯絡電話");
+    return;
+  }
+
+  if(!phoneRegex.test(phoneVal)){
+    alert("聯絡電話只限10碼，開頭要09");
+    document.getElementById('phone').focus();
     return;
   }
 
@@ -303,8 +383,8 @@ function sendLine(){
 
   let m=`【龍天宮 ${YEAR} 年度 七月普度祈福報名表】\n`;
 
-  m += `聯絡人：${document.getElementById('contactName').value}\n`;
-  m += `電話：${document.getElementById('phone').value}\n`;
+  m += `聯絡人：${contactNameVal}\n`;
+  m += `電話：${phoneVal}\n`;
   m += `────────────\n`;
 
   let grandTotal =
@@ -371,12 +451,12 @@ function sendLine(){
 
   formData.append(
     'contactName',
-    document.getElementById('contactName').value
+    contactNameVal
   );
 
   formData.append(
     'phone',
-    document.getElementById('phone').value
+    phoneVal
   );
 
   formData.append(
@@ -466,6 +546,9 @@ function sendLine(){
 // 預設先新增一筆
 addPudu();
 addNewbie();
+
+// # *11161750 聯絡電話只限10碼，開頭要09：網頁載入後立即執行一次鎖定檢查，確保預設新增的欄位處於鎖定狀態
+checkContactValidation();
   
 </script>
 
