@@ -115,10 +115,11 @@ input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-
 <a class="quick-registration" href="https://ltgjigaisu.streamlit.app/" target="_blank" rel="noopener noreferrer">👉查詢去年祭改報名及快速報名連結</a>
 
 <div class="section">
-<label>聯絡人姓名</label>
-<input id="contactName">
-<label>聯絡電話</label>
-<input id="phone">
+  <label for="contactName">聯絡人姓名</label>
+  <input id="contactName" type="text">
+  
+  <label for="phone">聯絡電話</label>
+  <input id="phone" type="tel" maxlength="10" pattern="^09\d{8}$" title="請輸入以 09 開頭且共 10 碼的手機號碼" placeholder="例如：0912345678">
 </div>
 
 <div class="section">
