@@ -102,7 +102,7 @@
       </section>
 
       <!-- # *11162115 輸入密碼後，才看的到各項行政系統 -->
-      <section id="systems" hidden>
+      <section id="systems" style="display: none;">
         <h1>行政系統</h1>
         <a class="system-link" href="https://ltginventory.streamlit.app/" target="_blank" rel="noopener noreferrer">庫存管理系統</a>
         <a class="system-link" href="https://ltgnoapp.streamlit.app" target="_blank" rel="noopener noreferrer">法會及進香報名人數系統</a>
@@ -124,7 +124,6 @@
         submitButton.disabled = true;
         status.textContent = '驗證中…';
 
-        // 呼叫 GAS 後端的 verifyAdminPassword 進行密碼驗證
         google.script.run
           .withSuccessHandler((isValid) => {
             passwordInput.value = '';
@@ -132,8 +131,8 @@
 
             if (isValid) {
               // 驗證成功後隱藏登入區塊，並顯示 5 項行政系統
-              document.getElementById('login').hidden = true;
-              document.getElementById('systems').hidden = false;
+              document.getElementById('login').style.display = 'none';
+              document.getElementById('systems').style.display = 'grid';
               return;
             }
 
