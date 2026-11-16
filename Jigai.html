@@ -23,15 +23,96 @@ input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-
 .item{border-top:1px dashed #ddd;margin-top:10px;padding-top:10px}
 .add{background:#8B0000;color:#fff;border:none;border-radius:6px;padding:10px;font-size:16px;width:100%;margin-top:10px;cursor:pointer}
 .submit{background:#06C755;color:#fff;border:none;border-radius:8px;padding:14px;font-size:18px;width:100%;cursor:pointer}
-/* // # * 改了：新增按鈕禁用時的樣式 */
 .submit:disabled{background:#ccc;cursor:not-allowed}
 .quick-registration{display:block;text-align:center;margin:0 0 15px;padding:12px;background:#8B0000;color:#fff;border-radius:8px;font-size:18px;font-weight:bold;text-decoration:none}
 .total{text-align:center;font-size:20px;color:darkred;font-weight:bold}
 .note{font-size:14px;color:#555;background:#fff3cd;border-radius:8px;padding:10px}
+
+/* # * 11161055 時間未到時顯示倒數天數：倒數遮罩與主內容隱藏樣式 */
+#countdown-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #f5f5f5;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* # * 11161140 關閉網站時間：已截止關閉畫面樣式 */
+#closed-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #f5f5f5;
+  z-index: 9999;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.countdown-box {
+  background: #fff;
+  border-radius: 12px;
+  padding: 30px 20px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  max-width: 400px;
+  width: 100%;
+  border-top: 6px solid #8B0000;
+}
+.countdown-box h1 {
+  margin-top: 0;
+  font-size: 22px;
+  color: #8B0000;
+}
+.countdown-timer {
+  font-size: 22px;
+  font-weight: bold;
+  color: #d9534f;
+  background: #fff3cd;
+  padding: 15px 10px;
+  border-radius: 8px;
+  margin: 15px 0;
+}
+#main-form {
+  display: none;
+}
 </style>
 </head>
 
 <body>
+
+<!-- # * 11161055 時間未到時顯示倒數天數：倒數計時遮罩區塊 -->
+<div id="countdown-overlay">
+  <div class="countdown-box">
+    <h1>龍天宮 民國116(2027)年度<br>正月祭改報名</h1>
+    <p style="font-size:16px;color:#555;margin:10px 0;">尚未開放報名，距離開放還有：</p>
+    <div id="countdown-display" class="countdown-timer">計算中...</div>
+    <p style="font-size:14px;color:#777;margin-bottom:0;">時間一到將自動開啟報名表單</p>
+  </div>
+</div>
+
+<!-- # * 11161140 關閉網站時間：時間到期後顯示的已截止畫面 -->
+<div id="closed-overlay">
+  <div class="countdown-box">
+    <h1>龍天宮 民國116(2027)年度<br>正月祭改報名</h1>
+    <p style="font-size:18px;color:#d9534f;margin:15px 0;font-weight:bold;">本期網路報名已截止</p>
+    <p style="font-size:14px;color:#777;margin-bottom:0;">如有疑問請洽廟方或透過官方 Line 聯絡</p>
+  </div>
+</div>
+
+<!-- # * 11161055 時間未到時顯示倒數天數：將原有表單包裹在 main-form 中 -->
+<div id="main-form">
 
 <h1>龍天宮 民國116(2027)年度<br>
   正月祭改報名<br>
@@ -70,7 +151,6 @@ input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-
 合計金額：<span id="grand">0</span> 元
 </div>
 
-<!-- // # * 改了：加上 id="submitBtn" 方便控制按鈕狀態 -->
 <button id="submitBtn" class="submit" onclick="sendLine()">送出並傳送 LINE</button>
 
 <div class="note" style="margin-top:15px">
@@ -84,7 +164,57 @@ input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-
   
 </div>
 
+</div><!-- # * 11161055 時間未到時顯示倒數天數：main-form 結束 -->
+
 <script>
+// # * 11161055 時間未到時顯示倒數天數：設定開放報名時間（請依需求修改 YYYY-MM-DDTHH:MM:SS）
+const OPEN_TIME = new Date("2026-11-16T11:45:00").getTime();
+
+// # * 11161140 關閉網站時間：設定關閉報名時間（請依需求修改 YYYY-MM-DDTHH:MM:SS）
+const CLOSE_TIME = new Date("2026-11-16T11:50:00").getTime();
+
+function checkTimeStatus() {
+  const now = new Date().getTime();
+  const overlay = document.getElementById("countdown-overlay");
+  const closedOverlay = document.getElementById("closed-overlay"); // # * 11161140 關閉網站時間
+  const mainForm = document.getElementById("main-form");
+  const display = document.getElementById("countdown-display");
+
+  // # * 11161140 關閉網站時間：判斷是否已經超過關閉時間
+  if (now > CLOSE_TIME) {
+    overlay.style.display = "none";
+    mainForm.style.display = "none";
+    closedOverlay.style.display = "flex"; // # * 11161140 關閉網站時間
+    if (typeof timeInterval !== "undefined") {
+      clearInterval(timeInterval);
+    }
+    return;
+  }
+
+  const distance = OPEN_TIME - now;
+
+  if (distance <= 0) {
+    // # * 11161055 時間未到時顯示倒數天數：時間已到，顯示表單
+    overlay.style.display = "none";
+    closedOverlay.style.display = "none"; // # * 11161140 關閉網站時間
+    mainForm.style.display = "block";
+  } else {
+    // # * 11161055 時間未到時顯示倒數天數：計算並顯示剩餘時間
+    overlay.style.display = "flex";
+    closedOverlay.style.display = "none"; // # * 11161140 關閉網站時間
+    mainForm.style.display = "none";
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    display.innerText = `${days} 天 ${hours} 時 ${minutes} 分 ${seconds} 秒`;
+  }
+}
+
+// # * 11161055 時間未到時顯示倒數天數與關閉時間：立即執行並每秒檢查狀態
+checkTimeStatus();
+const timeInterval = setInterval(checkTimeStatus, 1000);
+
 const YEAR=2027;
 const PRICE={Jigai:300};
 
@@ -113,24 +243,6 @@ function addJigai(){
   .insertAdjacentHTML('beforeend',html);
 
 }
-
-// // ===== 補財庫 =====
-// function addBuchaiku(){
-
-//   const html=`
-//   <div class="item">
-//     <label>姓名</label>
-//     <input class="n">
-
-//     <label>農曆民國出生年</label>
-//     <input class="y" type="number">
-//   </div>
-//   `;
-
-//   document.getElementById('Buchaiku')
-//   .insertAdjacentHTML('beforeend',html);
-
-// }
 
 // ===== 新增資料 =====
 function addNewbie(){
@@ -209,7 +321,6 @@ function sendLine(){
     return;
   }
 
-  // // # * 改了：按鈕鎖定與提示文字，優化電腦/網頁版點擊後的處理體感並避免重複點擊
   const btn = document.getElementById('submitBtn');
   btn.disabled = true;
   btn.innerText = "資料傳送中，請稍後...";
@@ -229,12 +340,7 @@ function sendLine(){
       id:"Jigai",
       name:"祭改",
       price:PRICE.Jigai
-    },
-    // {
-    //   id:"Buchaiku",
-    //   name:"補財庫",
-    //   price:PRICE.Buchaiku
-    // }
+    }
   ];
 
   // ===== 祭改 =====
@@ -304,7 +410,6 @@ function sendLine(){
 
   m += `合計金額：${grandTotal} 元`;
 
-  // // # * 改了：確保宣告完整，並搭配完整的 URL 編碼傳給 @813bpsag 官方帳號
   const lineUrl = "https://line.me/R/oaMessage/@813bpsag/?" + encodeURIComponent(m);
 
   // ===== Google Sheet =====
@@ -345,27 +450,6 @@ function sendLine(){
   });
 
   formData.append('JigaiItems',JigaiItems);
-
-//   // ===== 補財庫 =====
-//   let BuchaikuItems='';
-
-//   document.querySelectorAll("#Buchaiku .item")
-//   .forEach((item,idx)=>{
-
-//     const name=item.querySelector(".n")?.value?.trim();
-
-//     const year=item.querySelector(".y")?.value?.trim();
-
-//     if(name && year){
-
-//       BuchaikuItems +=
-//       `${idx+1}. ${name} 民國${year} ${gz(year)}   `;
-
-//     }
-
-//   });
-
-//   formData.append('BuchaikuItems',BuchaikuItems);
 
   // ===== 新增資料 =====
   let newbieItems='';
@@ -411,14 +495,12 @@ fetch(
 
   alert("資料已送出");
 
-  // // # * 改了：改用 window.location.href 跳轉代替 window.open，解決手機與電腦瀏覽器阻擋彈出視窗問題
   window.location.href = lineUrl;
 })
 .catch(err=>{
   console.error(err);
   alert("送出失敗");
 
-  // // # * 改了：若發生錯誤時還原按鈕狀態
   btn.disabled = false;
   btn.innerText = "送出並傳送 LINE";
 });
