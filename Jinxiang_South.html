@@ -100,7 +100,7 @@ input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-
 </div>
 
 <div class="section">
-<h2>🚩 進香（每人1300 元）</h2>
+<h2>🚩 進香（每人2600 元）</h2>
 <div id="Jinxiang"></div>
 <button class="add" onclick="addJinxiang()">＋ 新增</button>
 </div>
@@ -126,8 +126,8 @@ input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-
 
 <script>
 // # * 11161700 網站自動開啟/關閉/截止時間：設定自動開啟與關閉/截止時間（格式：YYYY-MM-DDTHH:MM:SS+08:00）
-const OPEN_TIME  = new Date("2026-11-16T17:08:00+08:00").getTime();
-const CLOSE_TIME = new Date("2027-09-05T00:00:00+08:00").getTime();
+const OPEN_TIME  = new Date("2027-01-01T08:00:00+08:00").getTime();
+const CLOSE_TIME = new Date("2027-03-11T08:00:00+08:00").getTime();
 
 // # * 11161700 網站自動開啟/關閉/截止時間：定時檢查目前時間並切換對應畫面
 function checkSiteSchedule() {
@@ -170,7 +170,7 @@ checkSiteSchedule();
 const scheduleTimer = setInterval(checkSiteSchedule, 1000);
 
 const YEAR=2026;
-const PRICE={Jinxiang:1300};
+const PRICE={Jinxiang:2600};
 
 // 修正：第四個字改回「丁」
 const stems=["甲","乙","丙","丁","戊","己","庚","辛","壬","癸"];
