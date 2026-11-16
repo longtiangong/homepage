@@ -494,4 +494,84 @@ function sendLine(){
     const name=item.querySelector(".n")?.value?.trim();
     const year=item.querySelector(".y")?.value?.trim();
     const ding=item.querySelector(".T")?.value?.trim() || '0';
-    const kou=item
+    const kou=item.querySelector(".K")?.value?.trim() || '0';
+
+    if(name && year){
+
+      PuduItems +=
+      `${idx+1}. ${name} 民國${year} ${gz(year)} ${ding}丁 ${kou}口 ｜ `;
+
+    }
+
+  });
+
+  formData.append('PuduItems',PuduItems);
+
+  // ===== 新增資料 =====
+  let newbieItems='';
+
+  document.querySelectorAll("#newbie .item")
+  .forEach((item,idx)=>{
+
+    const type=item.querySelector(".t")?.value || '';
+    const name=item.querySelector(".n")?.value?.trim();
+    const address=item.querySelector(".Ad")?.value?.trim();
+    const lunar=item.querySelector(".l")?.value?.trim();
+    const time=item.querySelector(".time")?.value?.trim();
+    const items=item.querySelector(".items")?.value?.trim();
+
+    if(name){
+
+      newbieItems +=
+      `${idx+1}. [${type}] 姓名：${name} 地址：${address} 農曆：${lunar} 時辰：${time} 丁口：${items} ｜ `;
+
+    }
+
+  });
+
+  formData.append('newbieItems',newbieItems);
+
+  // ===== 傳送到 Google Sheet =====
+  fetch(
+    'https://script.google.com/macros/s/AKfycby5Xfkt4dtjTD6P2Ca8sWYnlkJuU6sgeewo9OaYj380SFXosoSzsmzaWaxkgKFAHAeK/exec',
+    {
+      method:'POST',
+      body:formData
+    }
+  )
+  .then(r=>r.text())
+  .then(res=>{
+
+    console.log(res);
+
+    alert("資料已送出");
+
+    // // # * 改了：跳轉至 LINE 頁面
+    window.location.href = lineUrl;
+
+  })
+  .catch(err=>{
+
+    console.error(err);
+
+    alert("送出失敗");
+
+    // // # * 改了：若傳送失敗，還原按鈕狀態
+    btn.disabled = false;
+    btn.innerText = "送出並傳送 LINE";
+
+  });
+
+}
+
+// 預設先新增一筆
+addPudu();
+addNewbie();
+
+// # *11161750 聯絡電話只限10碼，開頭要09：網頁載入後立即執行一次鎖定檢查，確保預設新增的欄位處於鎖定狀態
+checkContactValidation();
+  
+</script>
+
+</body>
+</html>
