@@ -66,6 +66,20 @@ input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-
   border-radius: 8px;
   margin: 15px 0;
 }
+/* # *11162000 增加返回首頁至頁面：返回首頁連結樣式 */
+.back-link {
+  margin-top: 15px;
+  margin-bottom: 0;
+  font-size: 15px;
+}
+.back-link a {
+  color: #8B0000;
+  text-decoration: none;
+  font-weight: bold;
+}
+.back-link a:hover {
+  text-decoration: underline;
+}
 #main-form {
   display: none;
 }
@@ -81,6 +95,8 @@ input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-
     <p style="font-size:16px;color:#555;margin:10px 0;">尚未開放報名，距離開放還有：</p>
     <div id="countdown-display" class="countdown-timer">計算中...</div>
     <p style="font-size:14px;color:#777;margin-bottom:0;">時間一到將自動開啟報名表單</p>
+    <!-- # *11162000 增加返回首頁至頁面 -->
+    <p class="back-link"><a href="index.html">← 返回首頁</a></p>
   </div>
 </div>
 
@@ -90,6 +106,8 @@ input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-
     <h1>龍天宮 民國 116(2027) 年度<br>三月玄天上帝聖誕全家補運暨補財庫祈福報名</h1>
     <p style="font-size:18px;color:#d9534f;margin:15px 0;font-weight:bold;">本期網路報名已截止</p>
     <p style="font-size:14px;color:#777;margin-bottom:0;">如有疑問請洽廟方或透過官方 Line 聯絡</p>
+    <!-- # *11162000 增加返回首頁至頁面 -->
+    <p class="back-link"><a href="index.html">← 返回首頁</a></p>
   </div>
 </div>
 
@@ -151,12 +169,15 @@ input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-
 補財庫：祈求「開財路、補財庫、守財庫」。財運穩定、正財增加、漏財減少、生意興旺
 </div>
 
+<!-- # *11162000 增加返回首頁至頁面 -->
+<p class="back-link" style="text-align:center;margin-bottom:15px;"><a href="index.html">← 返回首頁</a></p>
+
 </div><!-- # * 11161250 網站自動開啟/關閉/截止時間：main-form 結束 -->
 
 <script>
 // # * 11161250 網站自動開啟/關閉/截止時間：設定自動開啟與關閉/截止時間（格式：YYYY-MM-DDTHH:MM:SS+08:00）
 const OPEN_TIME  = new Date("2027-02-15T08:00:00+08:00").getTime();
-const CLOSE_TIME = new Date("2027-04-08T0:12:00+08:00").getTime();
+const CLOSE_TIME = new Date("2027-04-08T00:12:00+08:00").getTime();
 
 // # * 11161250 網站自動開啟/關閉/截止時間：定時檢查目前時間並切換對應畫面
 function checkSiteSchedule() {
