@@ -383,7 +383,7 @@ function sendLine(){
     return;
   }
 
-  let m=`【龍天宮 ${YEAR} 年度 九月進香報名表】\n`;
+  let m=`【龍天宮 ${YEAR} 年度 南巡進香報名表】\n`;
   m += `聯絡人：${contactNameVal}\n`;
   m += `電話：${phoneVal}\n`;
   m += `────────────\n`;
@@ -436,6 +436,8 @@ function sendLine(){
 
   // ===== Google Sheet =====
   let formData=new URLSearchParams();
+  // *11162255 增加南巡和北巡：指定寫入的工作表名稱
+  formData.append('sheetName', '南巡進香');
   formData.append('contactName', contactNameVal);
   formData.append('phone', phoneVal);
   formData.append('total', grandTotal);
