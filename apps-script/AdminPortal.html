@@ -84,6 +84,7 @@
   </head>
   <body>
     <main>
+      <!-- # *11162115 輸入密碼後，才看的到各項行政系統 -->
       <section id="login">
         <h1>行政系統</h1>
         <p>請輸入管理密碼以查看系統連結。</p>
@@ -100,6 +101,7 @@
         <p id="status" role="status" aria-live="polite"></p>
       </section>
 
+      <!-- # *11162115 輸入密碼後，才看的到各項行政系統 -->
       <section id="systems" hidden>
         <h1>行政系統</h1>
         <a class="system-link" href="https://ltginventory.streamlit.app/" target="_blank" rel="noopener noreferrer">庫存管理系統</a>
@@ -111,6 +113,7 @@
     </main>
 
     <script>
+      // # *11162115 輸入密碼後，才看的到各項行政系統
       const form = document.getElementById('login-form');
       const passwordInput = document.getElementById('password');
       const submitButton = document.getElementById('submit');
@@ -121,12 +124,14 @@
         submitButton.disabled = true;
         status.textContent = '驗證中…';
 
+        // 呼叫 GAS 後端的 verifyAdminPassword 進行密碼驗證
         google.script.run
           .withSuccessHandler((isValid) => {
             passwordInput.value = '';
             submitButton.disabled = false;
 
             if (isValid) {
+              // 驗證成功後隱藏登入區塊，並顯示 5 項行政系統
               document.getElementById('login').hidden = true;
               document.getElementById('systems').hidden = false;
               return;
