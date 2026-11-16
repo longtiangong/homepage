@@ -64,6 +64,20 @@ input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-
   border-radius: 8px;
   margin: 15px 0;
 }
+/* # *11162000 增加返回首頁至頁面：返回首頁連結樣式 */
+.back-link {
+  margin-top: 15px;
+  margin-bottom: 0;
+  font-size: 15px;
+}
+.back-link a {
+  color: #8B0000;
+  text-decoration: none;
+  font-weight: bold;
+}
+.back-link a:hover {
+  text-decoration: underline;
+}
 #main-form {
   display: none;
 }
@@ -79,6 +93,8 @@ input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-
     <p style="font-size:16px;color:#555;margin:10px 0;">尚未開放報名，距離開放還有：</p>
     <div id="countdown-display" class="countdown-timer">計算中...</div>
     <p style="font-size:14px;color:#777;margin-bottom:0;">時間一到將自動開啟報名表單</p>
+    <!-- # *11162000 增加返回首頁至頁面 -->
+    <p class="back-link"><a href="index.html">← 返回首頁</a></p>
   </div>
 </div>
 
@@ -88,6 +104,8 @@ input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-
     <h1>龍天宮 民國116(2027)年度<br>七月普度報名</h1>
     <p style="font-size:18px;color:#d9534f;margin:15px 0;font-weight:bold;">本期網路報名已截止</p>
     <p style="font-size:14px;color:#777;margin-bottom:0;">如有疑問請洽廟方或透過官方 Line 聯絡</p>
+    <!-- # *11162000 增加返回首頁至頁面 -->
+    <p class="back-link"><a href="index.html">← 返回首頁</a></p>
   </div>
 </div>
 
@@ -139,6 +157,9 @@ input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-
 「普」是普及、平等；「度」是超度、濟度。普度的對象不只是自己的祖先，更包含那些無人祭祀的「好兄弟」（孤魂野鬼），希望透過食物與經文的加持，讓祂們免於飢餓、得到解脫。<br>
 
 </div>
+
+<!-- # *11162000 增加返回首頁至頁面 -->
+<p class="back-link" style="text-align:center;margin-bottom:15px;"><a href="index.html">← 返回首頁</a></p>
 
 </div><!-- # * 11161325 網站自動開啟/關閉/截止時間：main-form 結束 -->
 
@@ -473,84 +494,4 @@ function sendLine(){
     const name=item.querySelector(".n")?.value?.trim();
     const year=item.querySelector(".y")?.value?.trim();
     const ding=item.querySelector(".T")?.value?.trim() || '0';
-    const kou=item.querySelector(".K")?.value?.trim() || '0';
-
-    if(name && year){
-
-      PuduItems +=
-      `${idx+1}. ${name} 民國${year} ${gz(year)} ${ding}丁 ${kou}口 ｜ `;
-
-    }
-
-  });
-
-  formData.append('PuduItems',PuduItems);
-
-  // ===== 新增資料 =====
-  let newbieItems='';
-
-  document.querySelectorAll("#newbie .item")
-  .forEach((item,idx)=>{
-
-    const type=item.querySelector(".t")?.value || '';
-    const name=item.querySelector(".n")?.value?.trim();
-    const address=item.querySelector(".Ad")?.value?.trim();
-    const lunar=item.querySelector(".l")?.value?.trim();
-    const time=item.querySelector(".time")?.value?.trim();
-    const items=item.querySelector(".items")?.value?.trim();
-
-    if(name){
-
-      newbieItems +=
-      `${idx+1}. [${type}] 姓名：${name} 地址：${address} 農曆：${lunar} 時辰：${time} 丁口：${items} ｜ `;
-
-    }
-
-  });
-
-  formData.append('newbieItems',newbieItems);
-
-  // ===== 傳送到 Google Sheet =====
-  fetch(
-    'https://script.google.com/macros/s/AKfycby5Xfkt4dtjTD6P2Ca8sWYnlkJuU6sgeewo9OaYj380SFXosoSzsmzaWaxkgKFAHAeK/exec',
-    {
-      method:'POST',
-      body:formData
-    }
-  )
-  .then(r=>r.text())
-  .then(res=>{
-
-    console.log(res);
-
-    alert("資料已送出");
-
-    // // # * 改了：跳轉至 LINE 頁面
-    window.location.href = lineUrl;
-
-  })
-  .catch(err=>{
-
-    console.error(err);
-
-    alert("送出失敗");
-
-    // // # * 改了：若傳送失敗，還原按鈕狀態
-    btn.disabled = false;
-    btn.innerText = "送出並傳送 LINE";
-
-  });
-
-}
-
-// 預設先新增一筆
-addPudu();
-addNewbie();
-
-// # *11161750 聯絡電話只限10碼，開頭要09：網頁載入後立即執行一次鎖定檢查，確保預設新增的欄位處於鎖定狀態
-checkContactValidation();
-  
-</script>
-
-</body>
-</html>
+    const kou=item
