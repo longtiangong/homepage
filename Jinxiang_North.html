@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>龍天宮北巡進香報名</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{font-family:"Microsoft JhengHei";background:#f5f5f5;margin:0;padding:10px}
+h1{text-align:center;color:#8B0000;font-size:22px;margin-bottom:15px}
+.section{background:#fff;border-radius:10px;padding:15px;margin-bottom:15px}
+h2{font-size:18px;margin:0 0 10px;color:#333}
+label{font-size:16px;margin-top:8px;display:block}
+input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-top:4px}
+.item{border-top:1px dashed #ddd;margin-top:10px;padding-top:10px}
+.add{background:#8B0000;color:#fff;border:none;border-radius:6px;padding:10px;font-size:16px;width:100%;margin-top:10px;cursor:pointer}
+.submit{background:#06C755;color:#fff;border:none;border-radius:8px;padding:14px;font-size:18px;width:100%;cursor:pointer}
+.total{text-align:center;font-size:20px;color:darkred;font-weight:bold}
+.note{font-size:14px;color:#555;background:#fff3cd;border-radius:8px;padding:10px}
+
+/* # * 11161700 網站自動開啟/關閉/截止時間：倒數遮罩、截止遮罩與表單預設隱藏樣式 */
+#countdown-overlay, #closed-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #f5f5f5;
+  z-index: 9999;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+.countdown-box {
+  background: #fff;
+  border-radius: 12px;
+  padding: 30px 20px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  max-width: 400px;
+  width: 100%;
+  border-top: 6px solid #8B0000;
+}
+.countdown-box h1 {
+  margin-top: 0;
+  font-size: 22px;
+  color: #8B0000;
+}
+.countdown-timer {
+  font-size: 22px;
+  font-weight: bold;
+  color: #d9534f;
+  background: #fff3cd;
+  padding: 15px 10px;
+  border-radius: 8px;
+  margin: 15px 0;
+}
+#main-form {
+  display: none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- # * 11161700 網站自動開啟/關閉/截止時間：尚未開放時的倒數計時遮罩 -->
+<div id="countdown-overlay">
+  <div class="countdown-box">
+    <h1>龍天宮 民國 116(2027) 年度<br>北巡進香報名</h1>
+    <p style="font-size:16px;color:#555;margin:10px 0;">尚未開放報名，距離開放還有：</p>
+    <div id="countdown-display" class="countdown-timer">計算中...</div>
+    <p style="font-size:14px;color:#777;margin-bottom:0;">時間一到將自動開啟報名表單</p>
+  </div>
+</div>
+
+<!-- # * 11161700 網站自動開啟/關閉/截止時間：超過截止時間後的關閉遮罩 -->
+<div id="closed-overlay">
+  <div class="countdown-box">
+    <h1>龍天宮 民國 116(2027) 年度<br>北巡進香報名</h1>
+    <p style="font-size:18px;color:#d9534f;margin:15px 0;font-weight:bold;">本期網路報名已截止</p>
+    <p style="font-size:14px;color:#777;margin-bottom:0;">如有疑問請洽廟方或透過官方 Line 聯絡</p>
+  </div>
+</div>
+
+<!-- # * 11161700 網站自動開啟/關閉/截止時間：報名表單主區塊 -->
+<div id="main-form">
+
+<h1>龍天宮 民國 116(2027) 年度<br>
+  北巡進香報名<br>
+  進香日期：民國116年國曆9/11(農曆八月十一日)星期六<br>
+</h1>
+
+<div class="section">
+<label>聯絡人姓名</label>
+<input id="contactName">
+<label>聯絡電話</label>
+<input id="phone" type="tel">
+</div>
+
+<div class="section">
+<h2>🚩 進香（每人1300 元）</h2>
+<div id="Jinxiang"></div>
+<button class="add" onclick="addJinxiang()">＋ 新增</button>
+</div>
+
+<div class="section">
+<h2>🧾 新增資料或資料更新</h2>
+<div id="newbie"></div>
+<button class="add" onclick="addNewbie()">＋ 新增</button>
+</div>
+
+<div class="section total">
+合計金額：<span id="grand">0</span> 元
+</div>
+
+<button class="submit" onclick="sendLine()">送出並傳送 LINE</button>
+
+<div class="note" style="margin-top:15px">
+⚠️ 進香宮廟<br>
+蘭陽白天宮。<br>
+</div>
+
+</div><!-- # * 11161700 網站自動開啟/關閉/截止時間：main-form 結束 -->
+
+<script>
+// # * 11161700 網站自動開啟/關閉/截止時間：設定自動開啟與關閉/截止時間（格式：YYYY-MM-DDTHH:MM:SS+08:00）
+const OPEN_TIME  = new Date("2026-11-16T17:18:00+08:00").getTime();
+const CLOSE_TIME = new Date("2027-03-11T08:00:00+08:00").getTime();
+
+// # * 11161700 網站自動開啟/關閉/截止時間：定時檢查目前時間並切換對應畫面
+function checkSiteSchedule() {
+  const now = Date.now();
+  const countdownOverlay = document.getElementById("countdown-overlay");
+  const closedOverlay = document.getElementById("closed-overlay");
+  const mainForm = document.getElementById("main-form");
+  const display = document.getElementById("countdown-display");
+
+  if (now > CLOSE_TIME) {
+    // 狀態 1：已超過關閉/截止時間 -> 關閉表單，顯示截止提示
+    countdownOverlay.style.display = "none";
+    mainForm.style.display = "none";
+    closedOverlay.style.display = "flex";
+    if (typeof scheduleTimer !== "undefined") {
+      clearInterval(scheduleTimer);
+    }
+  } else if (now >= OPEN_TIME) {
+    // 狀態 2：已到開啟時間且尚未截止 -> 隱藏遮罩，自動開啟表單
+    countdownOverlay.style.display = "none";
+    closedOverlay.style.display = "none";
+    mainForm.style.display = "block";
+  } else {
+    // 狀態 3：尚未到達開啟時間 -> 顯示倒數天數與時間
+    closedOverlay.style.display = "none";
+    mainForm.style.display = "none";
+    countdownOverlay.style.display = "flex";
+
+    const distance = OPEN_TIME - now;
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    display.innerText = `${days} 天 ${hours} 時 ${minutes} 分 ${seconds} 秒`;
+  }
+}
+
+// # * 11161700 網站自動開啟/關閉/截止時間：網頁載入立即執行並每秒更新狀態
+checkSiteSchedule();
+const scheduleTimer = setInterval(checkSiteSchedule, 1000);
+
+const YEAR=2026;
+const PRICE={Jinxiang:1300};
+
+// 修正：第四個字改回「丁」
+const stems=["甲","乙","丙","丁","戊","己","庚","辛","壬","癸"];
+const branches=["子","丑","寅","卯","辰","巳","午","未","申","酉","戌","亥"];
+
+function gz(y){
+  y=+y+1911;
+  return stems[(y-4)%10]+branches[(y-4)%12]+"年";
+}
+
+// ===== 進香 =====
+// 修正：函數名稱全部改為小寫 x 的 addJinxiang
+function addJinxiang(){
+
+const html=`
+  <div class="item">
+    <label>姓名</label>
+    <input class="n">
+
+    <label>民國出生年</label>
+    <input class="y" type="number">
+
+    <label>國曆出生年月日</label>
+    <input class="B" type="text" placeholder="例：065/06/18">
+
+    <label>身份證字號</label>
+    <input class="I" 
+       type="text" 
+       placeholder="例：A121666888" 
+       pattern="[A-Z][1-2][0-9]{8}" 
+       maxlength="10" 
+       oninput="this.value = this.value.toUpperCase();"
+       required>
+  </div>
+  `;
+
+document.getElementById('Jinxiang').insertAdjacentHTML('beforeend',html);
+}
+
+// ===== 新增資料 =====
+function addNewbie(){
+
+  const html=`
+  <div class="item">
+    <label>類型</label>
+    <select class="t">
+      <option value="新增">新增</option>
+      <option value="更新">更新</option>
+    </select>
+
+    <label>姓名</label>
+    <input class="n">
+
+    <label>地址</label>
+    <input class="Ad">
+
+    <label>國曆出生年月日</label>
+    <input class="NBD" placeholder="例：070/06/24">
+
+    <label>身份證號碼</label>
+    <input class="NID" 
+       type="text" 
+       placeholder="例：A121666888" 
+       pattern="[A-Z][1-2][0-9]{8}" 
+       maxlength="10" 
+       oninput="this.value = this.value.toUpperCase();"
+       required>
+  </div>
+  `;
+
+  document.getElementById('newbie').insertAdjacentHTML('beforeend',html);
+}
+
+// ===== 計算金額 =====
+function calc(){
+  let total=0;
+
+  ["Jinxiang"].forEach(id=>{
+    document.querySelectorAll(`#${id} .item`).forEach(item=>{
+      const name=item.querySelector(".n")?.value.trim();
+      const year=item.querySelector(".y")?.value.trim();
+
+      if(name && year){
+        total += PRICE[id];
+      }
+    });
+  });
+
+  document.getElementById('grand').innerText=total;
+}
+
+// ===== 即時更新 =====
+document.body.addEventListener("input",calc);
+
+// ===== LINE送出 =====
+function sendLine(){
+
+  // 先重新計算
+  calc();
+
+  // 聯絡資料檢查
+  if(
+    !document.getElementById('contactName').value ||
+    !document.getElementById('phone').value
+  ){
+    alert("請填聯絡資料");
+    return;
+  }
+
+  let m=`【龍天宮 ${YEAR} 年度 九月進香報名表】\n`;
+  m += `聯絡人：${document.getElementById('contactName').value}\n`;
+  m += `電話：${document.getElementById('phone').value}\n`;
+  m += `────────────\n`;
+
+  let grandTotal = Number(document.getElementById('grand').innerText);
+
+  // ===== 進香 =====
+  let categoryTotal = 0;
+  let index = 1;
+
+  document.querySelectorAll("#Jinxiang .item").forEach(item=>{
+    const name=item.querySelector(".n")?.value?.trim();
+    const year=item.querySelector(".y")?.value?.trim();
+    // 修正：Class 名稱要跟 HTML 模板對齊 (.B 與 .I)
+    const BD=item.querySelector(".B")?.value?.trim() || '無';
+    const TWID=item.querySelector(".I")?.value?.trim() || '無';
+
+    if(!name || !year) return;
+
+    m += `${index}. 進香 ${name} 民國${year}年(${gz(year)}) 國曆生日:${BD} 身分證:${TWID}\n`;
+    categoryTotal += PRICE.Jinxiang;
+    index++;
+  });
+
+  if(categoryTotal>0){
+    m += `小計：${categoryTotal} 元\n`;
+    m += `=============\n`;
+  }
+
+  // ===== 新增資料 =====
+  m += `新增或更新資料：\n`;
+
+  document.querySelectorAll("#newbie .item").forEach((item,idx)=>{
+    const type=item.querySelector(".t")?.value;
+    const name=item.querySelector(".n")?.value?.trim();
+    const address=item.querySelector(".Ad")?.value?.trim();
+    const Calendar=item.querySelector(".NBD")?.value?.trim();
+    const ID=item.querySelector(".NID")?.value?.trim();
+    
+    if(name){
+      m += `${idx+1}. [${type}] 姓名：${name} 地址：${address} 國曆：${Calendar} 身份證：${ID}\n`;
+    }
+  });
+
+  m += `────────────\n`;
+  m += `合計金額：${grandTotal} 元`;
+
+  // ===== LINE URL =====
+  const lineUrl= "https://line.me/R/oaMessage/@813bpsag/?" + encodeURIComponent(m);
+
+  // ===== Google Sheet =====
+  let formData=new URLSearchParams();
+  formData.append('contactName', document.getElementById('contactName').value);
+  formData.append('phone', document.getElementById('phone').value);
+  formData.append('total', grandTotal);
+
+  // ===== 進香 =====
+  let JinxiangItems='';
+  document.querySelectorAll("#Jinxiang .item").forEach((item,idx)=>{
+    const name=item.querySelector(".n")?.value?.trim();
+    const year=item.querySelector(".y")?.value?.trim();
+    // 修正：這裡的 Class 也要同步修正為 .B 與 .I
+    const BD=item.querySelector(".B")?.value?.trim() || '無';
+    const TWID=item.querySelector(".I")?.value?.trim() || '無';
+
+    if(name && year){
+      JinxiangItems += `${idx+1}. ${name} 民國${year} ${gz(year)} 生日:${BD} 身份證:${TWID} ｜ `;
+    }
+  });
+  formData.append('JinxiangItems',JinxiangItems);
+
+  // ===== 新增資料 =====
+  let newbieItems='';
+  document.querySelectorAll("#newbie .item").forEach((item,idx)=>{
+    const type=item.querySelector(".t")?.value || '';
+    const name=item.querySelector(".n")?.value?.trim();
+    const address=item.querySelector(".Ad")?.value?.trim();
+    const Calendar=item.querySelector(".NBD")?.value?.trim();
+    const ID=item.querySelector(".NID")?.value?.trim();
+
+    if(name){
+      newbieItems += `${idx+1}. [${type}] 姓名：${name} 地址：${address} 國曆：${Calendar} 身份證：${ID}  ｜ `;
+    }
+  });
+  formData.append('newbieItems',newbieItems);
+
+  // ===== 傳送到 Google Sheet =====
+  fetch(
+    'https://script.google.com/macros/s/AKfycbyHraQ_qgvG-HSK1SnsBZJe13NvpcTlbrCCnaHDUm83uKNzYYNtVT2xhWo8F2y71Bjd/exec',
+    {
+      method:'POST',
+      body:formData
+    }
+  )
+  .then(r=>r.text())
+  .then(res=>{
+    console.log(res);
+    alert("資料已送出");
+    window.open(lineUrl,'_blank');
+  })
+  .catch(err=>{
+    console.error(err);
+    alert("送出失敗");
+  });
+}
+
+// 預設先新增一筆
+addJinxiang();
+addNewbie();
+</script>
+
+</body>
+</html>
