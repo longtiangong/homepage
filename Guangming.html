@@ -19,24 +19,8 @@ input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-
 .note{font-size:14px;color:#555;background:#fff3cd;border-radius:8px;padding:10px}
 .warn{color:#d9534f;font-size:14px;margin-top:5px;display:none;}
 
-/* # *11161055 時間未到時顯示倒數天數：倒數遮罩與主內容隱藏樣式 */
-#countdown-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #f5f5f5;
-  z-index: 9999;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-/* # * 11161140 關閉網站時間：已截止關閉畫面樣式 */
-#closed-overlay {
+/* # * 11161230 網站自動開啟/關閉/截止時間：倒數遮罩、截止遮罩與表單預設隱藏樣式 */
+#countdown-overlay, #closed-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -50,7 +34,6 @@ input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-
   padding: 20px;
   box-sizing: border-box;
 }
-
 .countdown-box {
   background: #fff;
   border-radius: 12px;
@@ -83,7 +66,7 @@ input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-
 
 <body>
 
-<!-- # *11161055 時間未到時顯示倒數天數：倒數計時遮罩區塊 -->
+<!-- # * 11161230 網站自動開啟/關閉/截止時間：尚未開放時的倒數計時遮罩 -->
 <div id="countdown-overlay">
   <div class="countdown-box">
     <h1>龍天宮 民國116(2027)年度<br>光明燈太歲年斗 報名</h1>
@@ -93,7 +76,7 @@ input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-
   </div>
 </div>
 
-<!-- # * 11161140 關閉網站時間：時間到期後顯示的已截止畫面 -->
+<!-- # * 11161230 網站自動開啟/關閉/截止時間：超過截止時間後的關閉遮罩 -->
 <div id="closed-overlay">
   <div class="countdown-box">
     <h1>龍天宮 民國116(2027)年度<br>光明燈太歲年斗 報名</h1>
@@ -102,12 +85,13 @@ input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-
   </div>
 </div>
 
-<!-- # *11161055 時間未到時顯示倒數天數：將原有表單包裹在 main-form 中 -->
+<!-- # * 11161230 網站自動開啟/關閉/截止時間：報名表單主區塊 -->
 <div id="main-form">
 
 <h1>龍天宮 民國116(2027)年度 <br>
   光明燈太歲年斗 報名<br>
-  開燈、開斗日期：民國116年國曆2/14(農曆正月初九日)星期日<br>
+  祭改日期：民國115年國曆二月八日(農曆十二月廿一日)星期日<br>
+  開燈、開斗日期：民國115年國曆二月廿二日(農曆正月初六日)星期日<br>
 </h1>
 
 <div class="section">
@@ -177,45 +161,41 @@ input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-
 ⚠️ 報名後，請利用官方Line討論。<br>
 </div>
 
-</div><!-- # *11161055 時間未到時顯示倒數天數：main-form 結束 -->
+</div><!-- # * 11161230 網站自動開啟/關閉/截止時間：main-form 結束 -->
 
 <script>
-// # *11161055 時間未到時顯示倒數天數：設定開放報名時間（請依需求修改 YYYY-MM-DDTHH:MM:SS）
-const OPEN_TIME = new Date("2026-11-16T08:00:00").getTime();
+// # * 11161230 網站自動開啟/關閉/截止時間：設定自動開啟與關閉/截止時間（格式：YYYY-MM-DDTHH:MM:SS+08:00）
+const OPEN_TIME  = new Date("2026-11-16T12:33:00+08:00").getTime();
+const CLOSE_TIME = new Date("2027-02-14T00:00:00+08:00").getTime();
 
-// # * 11161140 關閉網站時間：設定關閉報名時間（請依需求修改 YYYY-MM-DDTHH:MM:SS）
-const CLOSE_TIME = new Date("2027-06-01T08:00:00").getTime();
-
-function checkTimeStatus() {
-  const now = new Date().getTime();
-  const overlay = document.getElementById("countdown-overlay");
-  const closedOverlay = document.getElementById("closed-overlay"); // # * 11161140 關閉網站時間
+// # * 11161230 網站自動開啟/關閉/截止時間：定時檢查目前時間並切換對應畫面
+function checkSiteSchedule() {
+  const now = Date.now();
+  const countdownOverlay = document.getElementById("countdown-overlay");
+  const closedOverlay = document.getElementById("closed-overlay");
   const mainForm = document.getElementById("main-form");
   const display = document.getElementById("countdown-display");
 
-  // # * 11161140 關閉網站時間：判斷是否已經超過關閉時間
   if (now > CLOSE_TIME) {
-    overlay.style.display = "none";
+    // 狀態 1：已超過關閉/截止時間 -> 關閉表單，顯示截止提示
+    countdownOverlay.style.display = "none";
     mainForm.style.display = "none";
-    closedOverlay.style.display = "flex"; // # * 11161140 關閉網站時間
-    if (typeof timeInterval !== "undefined") {
-      clearInterval(timeInterval);
+    closedOverlay.style.display = "flex";
+    if (typeof scheduleTimer !== "undefined") {
+      clearInterval(scheduleTimer);
     }
-    return;
-  }
-
-  const distance = OPEN_TIME - now;
-
-  if (distance <= 0) {
-    // # *11161055 時間未到時顯示倒數天數：時間已到，顯示表單
-    overlay.style.display = "none";
-    closedOverlay.style.display = "none"; // # * 11161140 關閉網站時間
+  } else if (now >= OPEN_TIME) {
+    // 狀態 2：已到開啟時間且尚未截止 -> 隱藏遮罩，自動開啟表單
+    countdownOverlay.style.display = "none";
+    closedOverlay.style.display = "none";
     mainForm.style.display = "block";
   } else {
-    // # *11161055 時間未到時顯示倒數天數：計算並顯示剩餘時間
-    overlay.style.display = "flex";
-    closedOverlay.style.display = "none"; // # * 11161140 關閉網站時間
+    // 狀態 3：尚未到達開啟時間 -> 顯示倒數天數與時間
+    closedOverlay.style.display = "none";
     mainForm.style.display = "none";
+    countdownOverlay.style.display = "flex";
+
+    const distance = OPEN_TIME - now;
     const days = Math.floor(distance / (1000 * 60 * 60 * 24));
     const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -224,6 +204,331 @@ function checkTimeStatus() {
   }
 }
 
-// # *11161055 時間未到時顯示倒數天數與關閉時間：立即執行並每秒檢查狀態
-checkTimeStatus();
-const timeInterval = setInterval(checkTimeStatus, 1000);
+// # * 11161230 網站自動開啟/關閉/截止時間：網頁載入立即執行並每秒更新狀態
+checkSiteSchedule();
+const scheduleTimer = setInterval(checkSiteSchedule, 1000);
+
+const YEAR=2026;
+// 幫 peace5M 加上金額定義（若需自訂可修改，此處暫設為 0 或依實際需求調整）
+const PRICE={light:300,taisui:300,peace5M:0,peace6T:6000,peace5T:5000,peace3T:3000,peace1T:1000};
+const stems=["甲","乙","丙","丁","戊","己","庚","辛","壬","癸"];
+const branches=["子","丑","寅","卯","辰","巳","午","未","申","酉","戌","亥"];
+
+function gz(y){y=+y+1911;return stems[(y-4)%10]+branches[(y-4)%12]+"年"}
+
+function addLight(){
+  const html = `
+  <div class="item">
+    <label>姓名</label><input class="n">
+    <label>民國出生年</label><input class="y" type="number">
+    <label>類型(同一人不同類型燈名，請填兩次)</label>
+    <select class="t">
+      <option value="文昌">文昌</option>
+      <option value="財利">財利</option>
+      <option value="婚姻">婚姻</option>
+      <option value="光明/平安">光明/平安</option>
+      <option value="元辰">元辰</option>
+      <option value="運途">運途</option>
+    </select>
+    <input class="c" placeholder="其他可自填">
+  </div>`;
+  document.getElementById('light').insertAdjacentHTML('beforeend', html);
+}
+
+function addPeace5M(){
+  document.getElementById('peace5M').insertAdjacentHTML('beforeend',`
+  <div class="item">
+    <label>姓名</label><input class="n">    
+    <label>斗別</label>
+    <select class="t" onchange="peaceWarn(this)">
+      <option value="大上帝">大上帝(名額已滿）</option>
+      <option value="二上帝">二上帝(名額已滿）</option>
+      <option value="中殿">中殿(有意者請回宮或請人代擲筊）</option>
+      <option value="天上聖母">天上聖母(名額已滿）</option>
+      <option value="財神爺">財神爺(名額已滿）</option>
+    </select>
+    <label>民國出生年</label><input class="y" type="number">
+    <div class="warn">⚠️ 本項目需回宮擲筊確認</div>
+  </div>`);
+}
+
+function addPeace6T(){
+  document.getElementById('peace6T').insertAdjacentHTML('beforeend',`
+  <div class="item">
+    <label>姓名</label><input class="n">    
+    <label>斗別</label>
+    <select class="t">
+      <option value="玄天上帝">玄天上帝</option> 
+      <option value="玉皇大帝">玉皇大帝</option> 
+      <option value="三官大帝">三官大帝</option> 
+      <option value="斗姥星君">斗姥星君</option>          
+    </select>
+    <label>民國出生年</label><input class="y" type="number">
+  </div>`);
+}
+
+function addPeace5T(){
+  document.getElementById('peace5T').insertAdjacentHTML('beforeend',`
+  <div class="item">
+    <label>姓名</label><input class="n">    
+    <label>斗別</label>
+    <select class="t">
+      <option value="天上聖母">天上聖母</option> 
+      <option value="關聖帝君">關聖帝君</option> 
+      <option value="文昌帝君">文昌帝君</option> 
+      <option value="觀音佛祖">觀音佛祖</option>  
+      <option value="五穀大帝">五穀大帝</option>  
+      <option value="九天玄女">九天玄女</option>  
+      <option value="武財神爺">武財神爺</option> 
+      <option value="城隍爺">城隍爺</option>
+    </select>
+    <label>民國出生年</label><input class="y" type="number">
+  </div>`);
+}
+
+function addPeace3T(){
+  document.getElementById('peace3T').insertAdjacentHTML('beforeend',`
+  <div class="item">
+    <label>姓名</label><input class="n">    
+    <label>斗別</label>
+    <select class="t">
+      <option value="陳靖姑">陳靖姑</option>  
+      <option value="張天師">張天師</option> 
+      <option value="中壇元帥">中壇元帥</option>  
+      <option value="註身娘娘">註身娘娘</option>  
+      <option value="地藏王菩薩">地藏王菩薩</option>  
+      <option value="池府千歲">池府千歲</option> 
+      <option value="法主聖君">法主聖君</option> 
+      <option value="濟公禪師">濟公禪師</option> 
+    </select>
+    <label>民國出生年</label><input class="y" type="number">
+  </div>`);
+}
+
+function addPeace1T(){
+  document.getElementById('peace1T').insertAdjacentHTML('beforeend',`
+  <div class="item">
+    <label>姓名</label><input class="n">    
+    <label>斗別</label>
+    <select class="t">
+      <option value="福德正神">福德正神</option>           
+    </select>
+    <label>民國出生年</label><input class="y" type="number">
+  </div>`);
+}
+
+function peaceWarn(sel){
+  const warn = sel.parentElement.querySelector('.warn');
+  warn.style.display = "block"; // 五大主斗皆顯示提醒
+}
+
+function addSimple(id){
+  const html = `
+  <div class="item">
+    <label>姓名</label><input class="n">
+    <label>民國出生年</label><input class="y" type="number">
+  </div>`;
+  document.getElementById(id).insertAdjacentHTML('beforeend', html);
+}
+
+function addNewbie(){
+  const html = `
+  <div class="item">
+    <label>類型</label>
+    <select class="t">
+      <option value="新增">新增</option>
+      <option value="更新">更新</option>
+    </select>
+    <label>姓名</label><input class="n">
+    <label>地址</label><input class="Ad">
+    <label>農曆出生年月日</label><input class="l" placeholder="例：70/06/24">
+    <label>時辰(不清楚寫吉時)</label><input class="time" placeholder="例：吉時">
+    <label>預約項目</label><input class="items" placeholder="例：光明燈(文昌)、祭改">
+  </div>`;
+  document.getElementById('newbie').insertAdjacentHTML('beforeend', html);
+}
+
+function calc(){
+  let t=0;
+  ["light","taisui","peace5M","peace6T","peace5T","peace3T","peace1T"].forEach(id=>{
+    document.querySelectorAll(`#${id} .item`).forEach(i=>{
+      if(i.querySelector(".n")?.value.trim() && i.querySelector(".y")?.value.trim()) {
+        t += PRICE[id];
+      }
+    });
+  });
+  document.getElementById('grand').innerText = t;
+}
+
+document.body.addEventListener("input", calc);
+
+function sendLine(){
+  if(!document.getElementById('contactName').value || !document.getElementById('phone').value){
+    alert("請填聯絡資料");
+    return;
+  }
+
+  let m = `【龍天宮 ${YEAR} 年度 光明燈太歲年斗 報名表】\n`;
+  m += `聯絡人：${document.getElementById('contactName').value}\n`;
+  m += `電話：${document.getElementById('phone').value}\n`;
+  m += `────────────\n`;
+
+  let grandTotal = 0;  
+ 
+  const categories = [
+    { id: "light",   name: "光明燈",   price: PRICE.light   },
+    { id: "taisui",  name: "太歲",     price: PRICE.taisui  },
+    { id: "peace5M", name: "五大主斗", price: PRICE.peace5M },
+    { id: "peace6T", name: "平安年斗6000元", price: PRICE.peace6T },
+    { id: "peace5T", name: "平安年斗5000元", price: PRICE.peace5T },
+    { id: "peace3T", name: "平安年斗3000元", price: PRICE.peace3T },
+    { id: "peace1T", name: "平安年斗1000元", price: PRICE.peace1T },
+  ];
+
+  categories.forEach(cat => {
+    const items = document.querySelectorAll(`#${cat.id} .item`);
+    if (items.length === 0) return;  
+
+    let categoryTotal = 0;
+    let index = 1;
+
+    items.forEach(item => {
+      const name = item.querySelector(".n")?.value?.trim();
+      const year = item.querySelector(".y")?.value?.trim();
+      const typeElem = item.querySelector(".t");
+      const custom = item.querySelector(".c")?.value?.trim();
+
+      if (!name || !year) return;
+
+      let type = custom || (typeElem ? typeElem.value : "");
+      let line = `${index}. ${cat.name} ${name} 民國${year} ${gz(year)}`;
+      if(type) line += `【${type}】`;
+      line += `\n`;
+
+      m += line;
+      categoryTotal += cat.price;
+      index++;
+    });
+
+    if (categoryTotal > 0 || cat.id === "peace5M") {
+      m += `小計：${categoryTotal} 元\n`;
+      m += `=============\n`;
+      grandTotal += categoryTotal;
+    }
+  });
+
+  m += `新增或更新資料：\n`;
+  document.querySelectorAll("#newbie .item").forEach((item, idx) => {
+    const type = item.querySelector(".t")?.value;
+    const name = item.querySelector(".n")?.value?.trim();
+    const address = item.querySelector(".Ad")?.value?.trim();
+    const lunar = item.querySelector(".l")?.value?.trim();
+    const time = item.querySelector(".time")?.value?.trim();
+    const items = item.querySelector(".items")?.value?.trim();
+
+    if (name && lunar) {
+      m += `${idx+1}. [${type}] 姓名：${name} 地址：${address} 農曆：${lunar} 時辰：${time} 項目：${items}\n`;
+    }
+  });
+
+  m += `────────────\n`;
+  m += `合計金額：${grandTotal} 元`;
+
+  const lineUrl = "https://line.me/R/oaMessage/@813bpsag/?" + encodeURIComponent(m);
+  window.open(lineUrl, '_blank');
+
+  alert("已開啟 LINE 確認訊息，請確認後傳送！\n同時資料正在背景存檔...");
+
+  // 背景送資料到 Sheet (將每個平安年斗獨立成一個欄位傳送)
+  let formData = new URLSearchParams();
+  formData.append('contactName', document.getElementById('contactName').value);
+  formData.append('phone', document.getElementById('phone').value);
+  formData.append('total', grandTotal);
+
+  let lightItems = '';
+  document.querySelectorAll("#light .item").forEach((item, idx) => {
+    const name = item.querySelector(".n")?.value?.trim();
+    const year = item.querySelector(".y")?.value?.trim();
+    const type = item.querySelector(".c")?.value?.trim() || item.querySelector(".t")?.value || '';
+    if (name && year) {
+      lightItems += `${idx+1}. ${name} 民國${year} ${gz(year)}【${type}】   `;
+    }
+  });
+  formData.append('lightItems', lightItems);
+
+  let taisuiItems = '';
+  document.querySelectorAll("#taisui .item").forEach((item, idx) => {
+    const name = item.querySelector(".n")?.value?.trim();
+    const year = item.querySelector(".y")?.value?.trim();
+    if (name && year) {
+      taisuiItems += `${idx+1}. ${name} 民國${year} ${gz(year)}   `;
+    }
+  });
+  formData.append('taisuiItems', taisuiItems);
+
+  let peace5MItems = '';
+  document.querySelectorAll("#peace5M .item").forEach((item, idx) => {
+    const name = item.querySelector(".n")?.value?.trim();
+    const year = item.querySelector(".y")?.value?.trim();
+    const type = item.querySelector(".t")?.value || '';
+    if (name && year) {
+      peace5MItems += `${idx+1}. ${name} 民國${year} ${gz(year)}【${type}】   `;
+    }
+  });
+  formData.append('peace5MItems', peace5MItems);
+
+  // 獨立拆分 4 種平安年斗傳送
+  const peaceCategories = [
+    { id: "peace6T", key: "peace6TItems" },
+    { id: "peace5T", key: "peace5TItems" },
+    { id: "peace3T", key: "peace3TItems" },
+    { id: "peace1T", key: "peace1TItems" }
+  ];
+
+  peaceCategories.forEach(cat => {
+    let itemsStr = '';
+    document.querySelectorAll(`#${cat.id} .item`).forEach((item, idx) => {
+      const name = item.querySelector(".n")?.value?.trim();
+      const year = item.querySelector(".y")?.value?.trim();
+      const type = item.querySelector(".t")?.value || '';
+      if (name && year) {
+        itemsStr += `${idx+1}. ${name} 民國${year} ${gz(year)}【${type}】   `;
+      }
+    });
+    formData.append(cat.key, itemsStr);
+  });
+
+  let newbieItems = '';
+  document.querySelectorAll("#newbie .item").forEach((item, idx) => {
+    const type = item.querySelector(".t")?.value || '';
+    const name = item.querySelector(".n")?.value?.trim();
+    const address = item.querySelector(".Ad")?.value?.trim();
+    const lunar = item.querySelector(".l")?.value?.trim();
+    const time = item.querySelector(".time")?.value?.trim();
+    const items = item.querySelector(".items")?.value?.trim();
+    if (name && lunar) {
+      newbieItems += `${idx+1}. [${type}] 姓名：${name} 地址：${address} 農曆：${lunar} 時辰：${time} 項目：${items}   `;
+    }
+  });
+  formData.append('newbieItems', newbieItems);
+
+  fetch('https://script.google.com/macros/s/AKfycbxJr-8sTSbcVEE7IwUNzoR2WiiT2OL7jp2BIcCeKzVAHUtDxQZfqReHsrCXZCGOXoEC8g/exec', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => response.text())
+  .then(result => {
+    if (result.trim() === "success") {
+      console.log("資料已存檔");
+    } else {
+      console.error("存檔失敗");
+    }
+  })
+  .catch(error => {
+    console.error("網路錯誤", error);
+  });
+}
+</script>
+
+</body>
+</html>
