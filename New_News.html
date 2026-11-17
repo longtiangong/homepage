@@ -16,14 +16,13 @@
         main {
             max-width: 900px;
             margin: 40px auto;
-            padding: 0 20px;
+            padding: 20px 30px 40px;
             background-color: #fff;
-            padding-bottom: 40px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
         h1 {
-            margin-top: 40px;
+            margin-top: 20px;
             margin-bottom: 10px;
             color: #8b261d; /* 廟宇傳統深紅配色 */
         }
@@ -49,29 +48,50 @@
             border-left: 4px solid #8b261d;
             padding-left: 10px;
         }
+        /* 條列式清單樣式 */
+        .news-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
         .news-item {
-            margin-bottom: 15px;
-            border-bottom: 1px dashed #eee;
-            padding-bottom: 15px;
+            position: relative;
+            padding-left: 18px;
+            margin-bottom: 18px;
+            border-bottom: 1px dashed #e6dcc8;
+            padding-bottom: 18px;
+        }
+        /* 自訂深紅色項目符號 */
+        .news-item::before {
+            content: "•";
+            color: #8b261d;
+            font-weight: bold;
+            font-size: 1.3em;
+            position: absolute;
+            left: 0;
+            top: -3px;
         }
         .news-item:last-child {
             border-bottom: none;
             padding-bottom: 0;
             margin-bottom: 0;
         }
-        .news-title {
-            font-weight: bold;
-            color: #444;
+        .news-header {
             font-size: 1.1em;
             margin-bottom: 5px;
         }
         .news-date {
             color: #8b261d;
-            font-weight: 500;
-            margin-bottom: 8px;
+            font-weight: bold;
+            margin-right: 6px;
+        }
+        .news-title {
+            font-weight: bold;
+            color: #333;
         }
         .news-desc {
             color: #555;
+            font-size: 0.98em;
         }
         .back-link {
             margin-top: 40px;
@@ -96,25 +116,36 @@
         <!-- 宮內公告區塊 -->
         <div class="committee-card">
             <h2>宮內公告</h2>
-            <div class="news-item">
-                <div class="news-title">丙午年十二正月祭改</div>
-                <div class="news-date">農曆十二月廿四日(116年國曆1/31)星期日</div>
-                <div class="news-desc">歡迎各位善信大德提早報名。</div>
-                <div class="news-title">丁未年正月光明燈太歲平安年斗</div>
-                <div class="news-date">農曆正月初九日(國曆2/14)星期日</div>
-                <div class="news-desc">歡迎各位善信大德提早報名。</div>
-                <!-- <p class="news-desc">目前尚無其他宮內公告，歡迎隨時關注本頁面以掌握最新廟務資訊。</p> -->
-            </div>
+            <ul class="news-list">
+                <li class="news-item">
+                    <div class="news-header">
+                        <span class="news-date">【116年國曆 1/31（日）／農曆十二月廿四日】</span>
+                        <span class="news-title">丙午年十二正月祭改</span>
+                    </div>
+                    <div class="news-desc">歡迎各位善信大德提早報名。</div>
+                </li>
+                <li class="news-item">
+                    <div class="news-header">
+                        <span class="news-date">【116年國曆 2/14（日）／農曆正月初九日】</span>
+                        <span class="news-title">丁未年正月光明燈太歲平安年斗</span>
+                    </div>
+                    <div class="news-desc">歡迎各位善信大德提早報名。</div>
+                </li>
+            </ul>
         </div>
 
         <!-- 友宮拜訪區塊 -->
         <div class="committee-card">
             <h2>友宮拜訪</h2>
-            <div class="news-item">
-                <div class="news-title">拜訪友宮：福仁慈惠堂</div>
-                <div class="news-date">拜訪日期：農曆十一月十一日（國曆 12/19）星期六 上午九點</div>
-                <div class="news-desc">歡迎各位善信大德一同前往共襄盛舉，交流參拜。</div>
-            </div>
+            <ul class="news-list">
+                <li class="news-item">
+                    <div class="news-header">
+                        <span class="news-date">【115年國曆 12/19（六）上午 9:00／農曆十一月十一日】</span>
+                        <span class="news-title">拜訪友宮：福仁慈惠堂</span>
+                    </div>
+                    <div class="news-desc">歡迎各位善信大德一同前往共襄盛舉，交流參拜。</div>
+                </li>
+            </ul>
         </div>
 
         <p class="back-link"><a href="index.html">← 返回首頁</a></p>
