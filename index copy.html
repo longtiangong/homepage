@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>中壢龍天宮</title>
+    <style>
+        body {
+            font-weight: bold;
+        }
+
+        body::after {
+            content: none !important;
+            display: none !important;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        nav a {
+            display: inline-block;
+            padding: 10px 16px;
+            border-radius: 6px;
+            background-color: #8B0000;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .navigation-prompt {
+            align-self: center;
+            color: #008b3c;
+            font-weight: bold;
+        }
+
+        nav a:hover,
+        nav a:focus-visible {
+            background-color: #600000;
+        }
+
+        .site-menu {
+            position: fixed;
+            top: 12px;
+            right: 16px;
+            z-index: 10;
+            font-size: 16px;
+        }
+
+        .site-menu > summary {
+            padding: 10px 16px;
+            border-radius: 6px;
+            background: #8B0000;
+            color: #fff;
+            cursor: pointer;
+            list-style: none;
+        }
+
+        .site-menu > summary::-webkit-details-marker,
+        .join-menu > summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .site-menu-items {
+            position: absolute;
+            top: calc(100% + 6px);
+            right: 0;
+            width: 220px;
+            padding: 6px 0;
+            border: 1px solid #8B0000;
+            border-radius: 6px;
+            background: #fff;
+            box-shadow: 0 4px 12px #0003;
+        }
+
+        .site-menu-items > a {
+            display: block;
+            padding: 9px 14px;
+            color: #600000;
+            text-decoration: none;
+        }
+
+        .site-menu-items > a:hover,
+        .site-menu-items > a:focus-visible {
+            background: #f5eaea;
+        }
+
+        /* # * 11161445 新增社群媒體 */
+        .social-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.35);
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            background-color: rgba(255, 255, 255, 0.12);
+            color: #fff !important;
+            text-decoration: none;
+            font-size: 15px;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .social-links a:hover,
+        .social-links a:focus-visible {
+            background-color: rgba(212, 175, 55, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .social-icon {
+            width: 22px;
+            height: 22px;
+            flex-shrink: 0;
+        }
+        /* # * 11161445 新增社群媒體 結束 */
+
+        /* 新增聯絡資訊（地址導航與電話撥號） */
+        .contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 12px 24px;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.35);
+            font-size: 15px;
+        }
+
+        .contact-info a {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: 6px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #FFE89E !important;
+            text-decoration: none;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .contact-info a:hover,
+        .contact-info a:focus-visible {
+            background-color: rgba(212, 175, 55, 0.35);
+            color: #fff !important;
+            transform: translateY(-1px);
+        }
+
+        @media screen and (max-width: 768px) {
+            nav {
+                margin-top: 120px;
+            }
+
+            .site-menu {
+                top: 12px;
+                right: 12px;
+            }
+
+            .site-logo {
+                position: relative;
+                top: auto;
+                left: auto;
+                display: block;
+                width: 110px;
+                max-width: 30vw;
+                margin: 10px 0 12px 10px;
+            }
+
+            section[aria-label="最新公告"] {
+                margin-top: 60px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <img class="site-logo" src="logo.jpg" alt="中壢龍天宮 Logo">
+
+    <details class="site-menu">
+        <summary>主要導覽</summary>
+        <div class="site-menu-items">
+            <a href="Yange.html">沿革</a>
+            <a href="New_News.html">最新消息</a>
+            <!-- <a href="Join.html">加入龍天宮</a> -->
+            <!-- <a href="OilLamp.html">油燈介紹</a> -->
+            <a href="https://ltgcalendar.streamlit.app/" target="_blank" rel="noopener noreferrer">龍天宮農民曆暨活動日期</a>
+            <a href="Committee.html">管委會名單</a>
+            <a href="YearLeaders.html">值年爐主／副爐主/ 頭家</a>
+            <!-- <a href="https://longtiangong.github.io/god_blessing/" target="_blank" rel="noopener noreferrer">開基神明</a> -->
+            <a href="https://script.google.com/macros/s/AKfycbxeafg5H5UUzL2QUXqfsEIxCyNQ0FbF7aZItS0H5qI687QTvZ9iSveoHcVPF5CsIrudoA/exec" target="_blank" rel="noopener noreferrer">行政系統</a>
+        </div>
+    </details>
+
+   
+
+    <section aria-label="最新公告" style="display: grid; gap: 8px; margin: 70px auto 20px; max-width: 1000px;">
+        <div style="display: flex; align-items: stretch; min-height: 44px; background: #8B0000; color: #fff;">
+            <strong style="display: flex; align-items: center; padding: 10px 12px; background: #359b35; white-space: nowrap;">法會活動</strong>
+            <marquee aria-label="丙午年十二正月祭改，祭改日：丙午年農曆十二月廿四日(116年國曆1/31)星期日" direction="left" scrollamount="5" style="flex: 1; min-width: 0; padding: 12px 8px; color: #fff;">
+                丙午年十二正月祭改，祭改日：丙午年農曆十二月廿四日(116年國曆1/31)星期日
+            </marquee>
+        </div>
+        <div style="display: flex; align-items: stretch; min-height: 44px; background: #8B0000; color: #fff;">
+            <strong style="display: flex; align-items: center; padding: 10px 12px; background: #359b35; white-space: nowrap;">法會活動</strong>
+            <marquee aria-label="丁未年正月光明燈太歲平安斗，開燈開斗日：農曆正月初九日(116年國曆2/14)星期日" direction="left" scrollamount="5" style="flex: 1; min-width: 0; padding: 12px 8px; color: #fff;">
+                丁未年正月光明燈太歲平安斗，開燈開斗日：農曆正月初九日(116年國曆2/14)星期日
+            </marquee>
+        </div>
+        <div style="display: flex; align-items: stretch; min-height: 44px; background: #8B0000; color: #fff;">
+            <strong style="display: flex; align-items: center; padding: 10px 12px; background: #600000; white-space: nowrap;">友宮拜訪</strong>
+            <marquee aria-label="福仁慈惠堂，拜訪日：農曆十一月十一日(國曆12/19)星期六" direction="left" scrollamount="5" style="flex: 1; min-width: 0; padding: 12px 8px; color: #fff;">
+                福仁慈惠堂，拜訪日：農曆十一月十一日(國曆12/19)星期六
+            </marquee>
+        </div>
+    </section>
+
+    <h1>中壢龍天宮丁未年民國116年法會及進香相關活動</h1>
+    <p>中壢龍天宮位於桃園市中壢區，為當地重要的宗教信仰中心。每年舉辦多場法會及相關活動，吸引眾多信徒參與。</p>
+    
+    <h2>法會活動</h2>
+    <ul>
+        <li>丙午年十二正月祭改<br>&emsp;&emsp;祭改日：農曆十二月廿四日(116年國曆1/31)星期日<br>&emsp;&emsp;<a href="1Jigai.html">👉報名連結</a></li>
+        <li>丁未年正月光明燈太歲平安年斗<br>&emsp;&emsp;開燈開斗日：農曆正月初九日(國曆2/14)星期日<br>&emsp;&emsp;<a href="2Guangming.html">👉報名連結</a></li>
+        <li>三月玄天上帝聖誕補運及補財庫<br>&emsp;&emsp;補運補財庫日：農曆三月初三日(國曆4/9)星期五<br>&emsp;&emsp;<a href="4Shendanfamily.html">👉報名連結</a></li>
+        <li>六月關聖帝君聖誕補運及補財庫<br>&emsp;&emsp;補運補財庫日：農曆六月十五日(國曆7/18)星期日<br>&emsp;&emsp;<a href="5Shendan_June.html">👉報名連結</a></li>
+        <li>七月中元普度大會<br>&emsp;&emsp;普度日：農曆七月廿八日(國曆8/29)星期日<br>&emsp;&emsp;<a href="6Pudu.html">👉報名連結</a></li>
+        <li>九月法主聖君聖誕補運及補財庫<br>&emsp;&emsp;補運補財庫日：農曆九月初四日(國曆10/3)星期日<br>&emsp;&emsp;<a href="8Shendan_September.html">👉報名連結</a></li>
+    </ul>
+
+    <h2>進香活動</h2>
+    <ul>
+        <li>二月南巡進香兩日<br>&emsp;&emsp;南巡進香日：農曆二月初六初七兩日(國曆3/13 & 3/14)星期六日<br>&emsp;&emsp;<a href="3Jinxiang_South.html">👉報名連結</a></li>
+        <li>九月北巡進香一日<br>&emsp;&emsp;北巡進香日：農曆八月十一日(國曆9/11)星期六<br>&emsp;&emsp;<a href="7Jinxiang_North.html">👉報名連結</a></li>
+    </ul>
+    <!-- <h2>友宮拜訪</h2>
+    <ul>
+        <li>福仁慈惠堂<br>&emsp;&emsp;拜訪日：農曆十一月十一日(國曆12/19)星期六</li>
+    </ul> -->
+    <div class="background-footer">
+        <img src="bg43.jpg" alt="" style="display: block !important; position: static !important; width: 100% !important; max-width: none !important; height: auto !important;">
+    </div>
+    <footer style="display: block !important; position: static !important; box-sizing: border-box; width: 100%; margin: 40px 0 0 !important; padding: 12px 12px 8px !important; background-color: #8B0000 !important; color: #D4AF37 !important; text-align: center !important; visibility: visible !important; opacity: 1 !important;">
+        <!-- # * 11161445 新增社群媒體 -->
+        <div class="social-links" aria-label="社群媒體連結">
+            <a href="https://www.facebook.com/dalunlongtiangong" target="_blank" rel="noopener noreferrer" aria-label="中壢龍天宮 Facebook">
+                <svg class="social-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="12" fill="#1877F2"/>
+                    <path d="M16.671 15.469L17.203 12H13.875V9.75C13.875 8.801 14.34 7.875 15.831 7.875H17.344V4.922C17.344 4.922 15.971 4.688 14.658 4.688C11.917 4.688 10.125 6.349 10.125 9.356V12H7.078V15.469H10.125V23.854C10.736 23.95 11.362 24 12 24C12.638 24 13.264 23.95 13.875 23.854V15.469H16.671Z" fill="#FFFFFF"/>
+                </svg>
+                <span>臉書 Facebook</span>
+            </a>
+            <a href="https://www.facebook.com/profile.php?id=100064899211357" target="_blank" rel="noopener noreferrer" aria-label="中壢龍天宮 Facebook 粉絲專頁">
+                <svg class="social-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="12" fill="#1877F2"/>
+                    <path d="M8 6.5V18.5" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M8 7.5H16.5L14.5 10.75L16.5 14H8V7.5Z" fill="#F37021" stroke="#FFFFFF" stroke-width="1.2" stroke-linejoin="round"/>
+                </svg>
+                <span>臉書粉絲專頁</span>
+            </a>
+            <a href="https://lin.ee/DNMC5i5" target="_blank" rel="noopener noreferrer" aria-label="中壢龍天宮 LINE 官方帳號">
+                <svg class="social-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="24" height="24" rx="6" fill="#06C755"/>
+                    <path d="M19.5 11.12C19.5 7.76 16.13 5.03 12 5.03C7.87 5.03 4.5 7.76 4.5 11.12C4.5 14.13 7.17 16.65 10.78 17.13C11.02 17.18 11.36 17.29 11.44 17.5C11.52 17.69 11.49 17.98 11.47 18.17C11.47 18.17 11.38 18.7 11.36 18.81C11.33 19 11.21 19.55 12.01 19.21C12.81 18.88 16.33 16.67 17.9 14.86C19.01 13.64 19.5 12.44 19.5 11.12Z" fill="#FFFFFF"/>
+                    <path d="M9.68 12.84H7.96C7.78 12.84 7.63 12.69 7.63 12.51V9.83C7.63 9.65 7.78 9.5 7.96 9.5C8.14 9.5 8.29 9.65 8.29 9.83V12.18H9.68C9.86 12.18 10.01 12.33 10.01 12.51C10.01 12.69 9.86 12.84 9.68 12.84ZM11.07 12.51C11.07 12.69 10.92 12.84 10.74 12.84C10.56 12.84 10.41 12.69 10.41 12.51V9.83C10.41 9.65 10.56 9.5 10.74 9.5C10.92 9.5 11.07 9.65 11.07 9.83V12.51ZM14.12 12.51C14.12 12.65 14.03 12.78 13.89 12.82C13.86 12.83 13.82 12.84 13.79 12.84C13.68 12.84 13.58 12.79 13.52 12.7L12.15 10.83V12.51C12.15 12.69 12 12.84 11.82 12.84C11.64 12.84 11.49 12.69 11.49 12.51V9.83C11.49 9.69 11.58 9.56 11.72 9.52C11.75 9.51 11.79 9.5 11.82 9.5C11.93 9.5 12.03 9.55 12.09 9.64L13.46 11.51V9.83C13.46 9.65 13.61 9.5 13.79 9.5C13.97 9.5 14.12 9.65 14.12 9.83V12.51ZM16.48 10.84C16.66 10.84 16.81 10.99 16.81 11.17C16.81 11.35 16.66 11.5 16.48 11.5H15.2V12.18H16.48C16.66 12.18 16.81 12.33 16.81 12.51C16.81 12.69 16.66 12.84 16.48 12.84H14.87C14.69 12.84 14.54 12.69 14.54 12.51V9.83C14.54 9.65 14.69 9.5 14.87 9.5H16.48C16.66 9.5 16.81 9.65 16.81 9.83C16.81 10.01 16.66 10.16 16.48 10.16H15.2V10.84H16.48Z" fill="#06C755"/>
+                </svg>
+                <span>LINE 官方帳號</span>
+            </a>
+        </div>
+        <!-- # * 11161445 新增社群媒體 結束 -->
+
+        <!-- 地址導航與電話撥號 -->
+        <div class="contact-info" aria-label="宮廟聯絡資訊">
+            <a href="https://www.google.com/maps/search/?api=1&query=320桃園市中壢區月眉里圓光路一段582巷38號" target="_blank" rel="noopener noreferrer" aria-label="開啟地圖導航至中壢龍天宮">
+                <span>📍 地址：320桃園市中壢區月眉里圓光路一段582巷38號（點擊導航）</span>
+            </a>
+            <a href="tel:034987977" aria-label="撥打電話 03 498 7977">
+                <span>📞 電話：03 498 7977（點擊撥號）</span>
+            </a>
+        </div>
+
+        Copyright © 2026 中壢龍天宮 All Rights Reserved.小祕書團隊[Design By CS]
+    </footer>
+</body>
+</html>

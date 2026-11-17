@@ -204,27 +204,19 @@
         </div>
     </details>
 
-   
-
+    <!-- # * 11171100 跑馬燈的資訊可自動更新 -->
     <section aria-label="最新公告" style="display: grid; gap: 8px; margin: 70px auto 20px; max-width: 1000px;">
+        <!-- # * 11171100 神明指示跑馬燈（手動更新區：請直接修改下方 marquee 內的文字） -->
         <div style="display: flex; align-items: stretch; min-height: 44px; background: #8B0000; color: #fff;">
-            <strong style="display: flex; align-items: center; padding: 10px 12px; background: #359b35; white-space: nowrap;">法會活動</strong>
-            <marquee aria-label="丙午年十二正月祭改，祭改日：丙午年農曆十二月廿四日(116年國曆1/31)星期日" direction="left" scrollamount="5" style="flex: 1; min-width: 0; padding: 12px 8px; color: #fff;">
-                丙午年十二正月祭改，祭改日：丙午年農曆十二月廿四日(116年國曆1/31)星期日
+            <strong style="display: flex; align-items: center; padding: 10px 12px; background: #D4AF37; color: #4A0000; white-space: nowrap;">神明指示</strong>
+            <marquee aria-label="神明指示公告" direction="left" scrollamount="5" style="flex: 1; min-width: 0; padding: 12px 8px; color: #FFE89E;">
+                【聖諭指示】請在此處手動輸入最新神明指示內容，敬請十方善信大德周知。
             </marquee>
         </div>
-        <div style="display: flex; align-items: stretch; min-height: 44px; background: #8B0000; color: #fff;">
-            <strong style="display: flex; align-items: center; padding: 10px 12px; background: #359b35; white-space: nowrap;">法會活動</strong>
-            <marquee aria-label="丁未年正月光明燈太歲平安斗，開燈開斗日：農曆正月初九日(116年國曆2/14)星期日" direction="left" scrollamount="5" style="flex: 1; min-width: 0; padding: 12px 8px; color: #fff;">
-                丁未年正月光明燈太歲平安斗，開燈開斗日：農曆正月初九日(116年國曆2/14)星期日
-            </marquee>
-        </div>
-        <div style="display: flex; align-items: stretch; min-height: 44px; background: #8B0000; color: #fff;">
-            <strong style="display: flex; align-items: center; padding: 10px 12px; background: #600000; white-space: nowrap;">友宮拜訪</strong>
-            <marquee aria-label="福仁慈惠堂，拜訪日：農曆十一月十一日(國曆12/19)星期六" direction="left" scrollamount="5" style="flex: 1; min-width: 0; padding: 12px 8px; color: #fff;">
-                福仁慈惠堂，拜訪日：農曆十一月十一日(國曆12/19)星期六
-            </marquee>
-        </div>
+        <!-- # * 11171100 神明指示跑馬燈 結束 -->
+
+        <!-- 自動更新跑馬燈容器（依日期自動帶入法會活動／進香活動／友宮拜訪） -->
+        <div id="dynamic-marquee-list" style="display: grid; gap: 8px;"></div>
     </section>
 
     <h1>中壢龍天宮丁未年民國116年法會及進香相關活動</h1>
@@ -245,10 +237,11 @@
         <li>二月南巡進香兩日<br>&emsp;&emsp;南巡進香日：農曆二月初六初七兩日(國曆3/13 & 3/14)星期六日<br>&emsp;&emsp;<a href="3Jinxiang_South.html">👉報名連結</a></li>
         <li>九月北巡進香一日<br>&emsp;&emsp;北巡進香日：農曆八月十一日(國曆9/11)星期六<br>&emsp;&emsp;<a href="7Jinxiang_North.html">👉報名連結</a></li>
     </ul>
-    <!-- <h2>友宮拜訪</h2>
+    <h2>友宮拜訪</h2>
     <ul>
         <li>福仁慈惠堂<br>&emsp;&emsp;拜訪日：農曆十一月十一日(國曆12/19)星期六</li>
-    </ul> -->
+    </ul>
+    
     <div class="background-footer">
         <img src="bg43.jpg" alt="" style="display: block !important; position: static !important; width: 100% !important; max-width: none !important; height: auto !important;">
     </div>
@@ -293,5 +286,98 @@
 
         Copyright © 2026 中壢龍天宮 All Rights Reserved.小祕書團隊[Design By CS]
     </footer>
+
+    <!-- # * 11171100 跑馬燈的資訊可自動更新：自動化載入腳本 -->
+    <script>
+        // # * 11171100 跑馬燈的資訊可自動更新
+        document.addEventListener("DOMContentLoaded", function () {
+            const activities = [
+                {
+                    category: "法會活動",
+                    tagColor: "#359b35",
+                    date: "2027-01-31",
+                    text: "丙午年十二正月祭改，祭改日：丙午年農曆十二月廿四日(116年國曆1/31)星期日"
+                },
+                {
+                    category: "法會活動",
+                    tagColor: "#359b35",
+                    date: "2027-02-14",
+                    text: "丁未年正月光明燈太歲平安斗，開燈開斗日：農曆正月初九日(116年國曆2/14)星期日"
+                },
+                {
+                    category: "法會活動",
+                    tagColor: "#359b35",
+                    date: "2027-04-09",
+                    text: "三月玄天上帝聖誕補運及補財庫，補運補財庫日：農曆三月初三日(國曆4/9)星期五"
+                },
+                {
+                    category: "法會活動",
+                    tagColor: "#359b35",
+                    date: "2027-07-18",
+                    text: "六月關聖帝君聖誕補運及補財庫，補運補財庫日：農曆六月十五日(國曆7/18)星期日"
+                },
+                {
+                    category: "法會活動",
+                    tagColor: "#359b35",
+                    date: "2027-08-29",
+                    text: "七月中元普度大會，普度日：農曆七月廿八日(國曆8/29)星期日"
+                },
+                {
+                    category: "法會活動",
+                    tagColor: "#359b35",
+                    date: "2027-10-03",
+                    text: "九月法主聖君聖誕補運及補財庫，補運補財庫日：農曆九月初四日(國曆10/3)星期日"
+                },
+                {
+                    category: "進香活動",
+                    tagColor: "#359b35",
+                    date: "2027-03-14",
+                    text: "二月南巡進香兩日，南巡進香日：農曆二月初六初七兩日(國曆3/13 & 3/14)星期六日"
+                },
+                {
+                    category: "進香活動",
+                    tagColor: "#359b35",
+                    date: "2027-09-11",
+                    text: "九月北巡進香一日，北巡進香日：農曆八月十一日(國曆9/11)星期六"
+                },
+                {
+                    category: "友宮拜訪",
+                    tagColor: "#600000",
+                    date: "2026-12-19",
+                    text: "福仁慈惠堂，拜訪日：農曆十一月十一日(國曆12/19)星期六"
+                }
+            ];
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const upcomingActivities = activities.filter(act => {
+                return new Date(act.date) >= today;
+            }).sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            const container = document.getElementById("dynamic-marquee-list");
+            const displayList = upcomingActivities.slice(0, 3);
+
+            if (displayList.length > 0) {
+                container.innerHTML = displayList.map(act => `
+                    <div style="display: flex; align-items: stretch; min-height: 44px; background: #8B0000; color: #fff;">
+                        <strong style="display: flex; align-items: center; padding: 10px 12px; background: ${act.tagColor}; white-space: nowrap;">${act.category}</strong>
+                        <marquee aria-label="${act.text}" direction="left" scrollamount="5" style="flex: 1; min-width: 0; padding: 12px 8px; color: #fff;">
+                            ${act.text}
+                        </marquee>
+                    </div>
+                `).join('');
+            } else {
+                container.innerHTML = `
+                    <div style="display: flex; align-items: stretch; min-height: 44px; background: #8B0000; color: #fff;">
+                        <strong style="display: flex; align-items: center; padding: 10px 12px; background: #359b35; white-space: nowrap;">最新公告</strong>
+                        <marquee aria-label="近期尚無活動公告" direction="left" scrollamount="5" style="flex: 1; min-width: 0; padding: 12px 8px; color: #fff;">
+                            近期尚無活動公告，請參考下方各項法會與進香行程。
+                        </marquee>
+                    </div>
+                `;
+            }
+        });
+    </script>
 </body>
 </html>
