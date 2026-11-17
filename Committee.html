@@ -5,12 +5,122 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <title>管委會名單｜中壢龍天宮</title>
+    <style>
+        /* 加入基礎排版樣式，確保閱讀舒適與對齊 */
+        body {
+            line-height: 1.8;
+            color: #333;
+            font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
+            background-color: #faf9f6;
+        }
+        main {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+            background-color: #fff;
+            padding-bottom: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        h1 {
+            margin-top: 40px;
+            margin-bottom: 10px;
+            color: #8b261d; /* 廟宇傳統深紅配色 */
+        }
+        .subtitle {
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #8b261d;
+            padding-bottom: 15px;
+        }
+        .committee-card {
+            background-color: #fffdf9;
+            border: 1px solid #e6dcc8;
+            border-radius: 6px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        .committee-card h2 {
+            font-size: 1.3em;
+            color: #8b261d;
+            margin-top: 0;
+            margin-bottom: 20px;
+            border-left: 4px solid #8b261d;
+            padding-left: 10px;
+        }
+        .committee-row {
+            display: flex;
+            margin-bottom: 15px;
+            border-bottom: 1px dashed #eee;
+            padding-bottom: 12px;
+        }
+        .committee-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        .committee-title {
+            font-weight: bold;
+            color: #444;
+            width: 150px;
+            flex-shrink: 0;
+        }
+        .committee-names {
+            color: #333;
+            flex-grow: 1;
+        }
+        .back-link {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+        .back-link a {
+            text-decoration: none;
+            color: #8b261d;
+            font-weight: bold;
+        }
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <main style="max-width: 900px; margin: 40px auto; padding: 0 20px;">
-        <h1 style="margin-top: 40px;">管委會名單</h1>
-        <p>本頁已建立，管委會名單待補。</p>
-        <p><a href="index.html">返回首頁</a></p>
+    <main>
+        <h1>管委會名單</h1>
+        <p class="subtitle">中壢龍天宮管理委員會委員芳名錄</p>
+
+        <div class="committee-card">
+            <h2>管理委員會幹部與委員</h2>
+            
+            <div class="committee-row">
+                <div class="committee-title">榮譽主任委員</div>
+                <div class="committee-names">陳劉鳳妹</div>
+            </div>
+
+            <div class="committee-row">
+                <div class="committee-title">主任委員</div>
+                <div class="committee-names">田志祥</div>
+            </div>
+
+            <div class="committee-row">
+                <div class="committee-title">副主任委員</div>
+                <div class="committee-names">林詩涵</div>
+            </div>
+
+            <div class="committee-row">
+                <div class="committee-title">總幹事</div>
+                <div class="committee-names">張智順</div>
+            </div>
+
+            <div class="committee-row">
+                <div class="committee-title">委員</div>
+                <div class="committee-names">
+                    王光蕋、李勝凱、李林美珠、李盧玉、吳美慧、吳俊傑、林秀美、徐應郎、徐晟紘、馬佑良、張文癸、張玉玫、張智源、陳羽柔、陸品容（註：原盧品容）、邱顯顥、曾呈正、黃煒盛、劉邦鈞、簡澤宏、田財德、田佳玲
+                </div>
+            </div>
+        </div>
+
+        <p class="back-link"><a href="index.html">← 返回首頁</a></p>
     </main>
 </body>
 </html>
