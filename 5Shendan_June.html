@@ -175,7 +175,7 @@ input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-
 
 <script>
 // # * 11161250 網站自動開啟/關閉/截止時間：設定自動開啟與關閉/截止時間（格式：YYYY-MM-DDTHH:MM:SS+08:00）
-const OPEN_TIME  = new Date("2027-06-01T08:00:00+08:00").getTime();
+const OPEN_TIME  = new Date("2026-06-01T08:00:00+08:00").getTime();
 const CLOSE_TIME = new Date("2027-07-18T10:00:00+08:00").getTime();
 
 // # * 11161250 網站自動開啟/關閉/截止時間：定時檢查目前時間並切換對應畫面
@@ -245,6 +245,7 @@ function checkContactValidation() {
     phoneMsg.textContent = '❌ 聯絡電話必須以 09 開頭';
     phoneMsg.style.color = '#d9534f';
   } else if (phoneVal.length < 10) {
+    // 修正斷行語法錯誤
     phoneMsg.textContent = `❌ 聯絡電話只限 10 碼（目前 ${phoneVal.length} 碼，還差 ${10 - phoneVal.length} 碼）`;
     phoneMsg.style.color = '#d9534f';
   } else if (nameVal.length === 0) {
@@ -413,7 +414,8 @@ function sendLine(){
   btn.disabled = true;
   btn.innerText = "資料傳送中，請稍後...";
 
-  let m=`【龍天宮 ${YEAR} 年度 九月聖誕補運補財庫祈福報名表】\n`;
+  // # * 11171200 分六月聖誕和九月聖誕：同步修正 LINE 訊息標題為六月聖誕
+  let m=`【龍天宮 ${YEAR} 年度 六月聖誕補運補財庫祈福報名表】\n`;
 
   m += `聯絡人：${contactNameVal}\n`;
 
@@ -508,6 +510,12 @@ function sendLine(){
 
   // ===== Google Sheet =====
   let formData=new URLSearchParams();
+
+  // # * 11171200 分六月聖誕和九月聖誕：指定寫入的工作表名稱（六月聖誕 / 九月聖誕）
+  formData.append(
+    'sheetName',
+    '六月聖誕'
+  );
 
   formData.append(
     'contactName',
