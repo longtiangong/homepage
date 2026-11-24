@@ -16,6 +16,9 @@ input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-
 .add{background:#8B0000;color:#fff;border:none;border-radius:6px;padding:10px;font-size:16px;width:100%;margin-top:10px;cursor:pointer}
 /* # *11161750 聯絡電話只限10碼，開頭要09：新增按鈕停用樣式 */
 .add:disabled{background:#ccc;cursor:not-allowed}
+.remove{background:#dc3545;color:#fff;border:none;border-radius:6px;padding:6px 12px;font-size:14px;margin-top:10px;cursor:pointer;float:right}
+.remove:hover{background:#b02a37}
+.item::after{content:"";display:block;clear:both}
 .submit{background:#06C755;color:#fff;border:none;border-radius:8px;padding:14px;font-size:18px;width:100%;cursor:pointer}
 /* # *11161750 聯絡電話只限10碼，開頭要09：送出按鈕停用樣式 */
 .submit:disabled{background:#ccc;cursor:not-allowed}
@@ -132,7 +135,13 @@ input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-
 <div class="section lockable-section section-locked">
 <h2>🏮 光明燈（300 元）(一個人一個燈名，幾個就填幾次)</h2>
 <div id="light"></div>
-<button class="add lockable-add" onclick="addLight()" disabled>＋ 新增（請先完成上方聯絡資料）</button>
+<button class="add lockable-add" onclick="addLight('light')" disabled>＋ 新增（請先完成上方聯絡資料）</button>
+</div>
+
+<div class="section lockable-section section-locked">
+<h2>🏮 光明燈_500元（500 元）(一個人一個燈名，幾個就填幾次)</h2>
+<div id="light500"></div>
+<button class="add lockable-add" onclick="addLight('light500')" disabled>＋ 新增（請先完成上方聯絡資料）</button>
 </div>
 
 <div class="section lockable-section section-locked">
@@ -142,7 +151,19 @@ input,select{width:100%;font-size:16px;padding:8px;box-sizing:border-box;margin-
 </div>
 
 <div class="section lockable-section section-locked">
-<h2>🌟 五大主斗 (金額請依廟方規定或擲筊為主)</h2>
+<h2>🧧 太歲_500元（500 元）</h2>
+<div id="taisui500"></div>
+<button class="add lockable-add" onclick="addSimple('taisui500')" disabled>＋ 新增（請先完成上方聯絡資料）</button>
+</div>
+
+<div class="section lockable-section section-locked">
+<h2>🐱🐶寵物平安燈（300 元）</h2>
+<div id="petLight"></div>
+<button class="add lockable-add" onclick="addPetLight()" disabled>＋ 新增（請先完成上方聯絡資料）</button>
+</div>
+
+<div class="section lockable-section section-locked">
+<h2>✨ 五大主斗 (金額請依廟方規定或擲筊為主)</h2>
 <div id="peace5M"></div>
 <button class="add lockable-add" onclick="addPeace5M()" disabled>＋ 新增（請先完成上方聯絡資料）</button>
 </div>
@@ -300,15 +321,36 @@ function checkContactValidation() {
 contactNameInput.addEventListener('input', checkContactValidation);
 phoneInput.addEventListener('input', checkContactValidation);
 
+// 刪除單一項目並重新計算合計金額
+function removeItem(btn) {
+  const item = btn.closest('.item');
+  if (item) {
+    item.remove();
+    calc();
+  }
+}
+
+const removeBtnHtml = `<button type="button" class="remove" onclick="removeItem(this)">🗑️ 刪除</button>`;
+
 const YEAR=2027;
-// 幫 peace5M 加上金額定義（若需自訂可修改，此處暫設為 0 或依實際需求調整）
-const PRICE={light:300,taisui:300,peace5M:0,peace6T:6000,peace5T:5000,peace3T:3000,peace1T:1000};
+const PRICE={
+  light:300,
+  light500:500,
+  taisui:300,
+  taisui500:500,
+  petLight:300,
+  peace5M:0,
+  peace6T:6000,
+  peace5T:5000,
+  peace3T:3000,
+  peace1T:1000
+};
 const stems=["甲","乙","丙","丁","戊","己","庚","辛","壬","癸"];
 const branches=["子","丑","寅","卯","辰","巳","午","未","申","酉","戌","亥"];
 
 function gz(y){y=+y+1911;return stems[(y-4)%10]+branches[(y-4)%12]+"年"}
 
-function addLight(){
+function addLight(targetId = 'light'){
   const html = `
   <div class="item">
     <label>姓名</label><input class="n">
@@ -318,13 +360,46 @@ function addLight(){
       <option value="文昌">文昌</option>
       <option value="財利">財利</option>
       <option value="婚姻">婚姻</option>
-      <option value="光明/平安">光明/平安</option>
+      <option value="光明">光明</option>
+      <option value="平安">平安</option>
       <option value="元辰">元辰</option>
       <option value="運途">運途</option>
     </select>
     <input class="c" placeholder="其他可自填">
+    ${removeBtnHtml}
   </div>`;
-  document.getElementById('light').insertAdjacentHTML('beforeend', html);
+  document.getElementById(targetId).insertAdjacentHTML('beforeend', html);
+}
+
+function togglePetSpecies(sel){
+  const customInput = sel.parentElement.querySelector('.c');
+  if (sel.value === '其他(自行輸入)') {
+    customInput.style.display = 'block';
+    customInput.focus();
+  } else {
+    customInput.style.display = 'none';
+    customInput.value = '';
+  }
+}
+
+function addPetLight(){
+  const html = `
+  <div class="item">
+    <label>寵物姓名</label><input class="n">
+    <label>民國出生年</label><input class="y" type="number">
+    <label>品種</label>
+    <select class="t" onchange="togglePetSpecies(this)">
+      <option value="貓">貓</option>
+      <option value="狗">狗</option>
+      <option value="鼠">鼠</option>
+      <option value="兔">兔</option>
+      <option value="鳥">鳥</option>
+      <option value="其他(自行輸入)">其他(自行輸入)</option>
+    </select>
+    <input class="c" placeholder="請自行輸入品種" style="display:none;">
+    ${removeBtnHtml}
+  </div>`;
+  document.getElementById('petLight').insertAdjacentHTML('beforeend', html);
 }
 
 function addPeace5M(){
@@ -341,6 +416,7 @@ function addPeace5M(){
     </select>
     <label>民國出生年</label><input class="y" type="number">
     <div class="warn">⚠️ 本項目需回宮擲筊確認</div>
+    ${removeBtnHtml}
   </div>`);
 }
 
@@ -356,6 +432,7 @@ function addPeace6T(){
       <option value="斗姥星君">斗姥星君</option>          
     </select>
     <label>民國出生年</label><input class="y" type="number">
+    ${removeBtnHtml}
   </div>`);
 }
 
@@ -375,6 +452,7 @@ function addPeace5T(){
       <option value="城隍爺">城隍爺</option>
     </select>
     <label>民國出生年</label><input class="y" type="number">
+    ${removeBtnHtml}
   </div>`);
 }
 
@@ -394,6 +472,7 @@ function addPeace3T(){
       <option value="濟公禪師">濟公禪師</option> 
     </select>
     <label>民國出生年</label><input class="y" type="number">
+    ${removeBtnHtml}
   </div>`);
 }
 
@@ -406,6 +485,7 @@ function addPeace1T(){
       <option value="福德正神">福德正神</option>           
     </select>
     <label>民國出生年</label><input class="y" type="number">
+    ${removeBtnHtml}
   </div>`);
 }
 
@@ -419,6 +499,7 @@ function addSimple(id){
   <div class="item">
     <label>姓名</label><input class="n">
     <label>民國出生年</label><input class="y" type="number">
+    ${removeBtnHtml}
   </div>`;
   document.getElementById(id).insertAdjacentHTML('beforeend', html);
 }
@@ -436,13 +517,14 @@ function addNewbie(){
     <label>農曆出生年月日</label><input class="l" placeholder="例：70/06/24">
     <label>時辰(不清楚寫吉時)</label><input class="time" placeholder="例：吉時">
     <label>預約項目</label><input class="items" placeholder="例：光明燈(文昌)、祭改">
+    ${removeBtnHtml}
   </div>`;
   document.getElementById('newbie').insertAdjacentHTML('beforeend', html);
 }
 
 function calc(){
   let t=0;
-  ["light","taisui","peace5M","peace6T","peace5T","peace3T","peace1T"].forEach(id=>{
+  ["light","light500","taisui","taisui500","petLight","peace5M","peace6T","peace5T","peace3T","peace1T"].forEach(id=>{
     document.querySelectorAll(`#${id} .item`).forEach(i=>{
       if(i.querySelector(".n")?.value.trim() && i.querySelector(".y")?.value.trim()) {
         t += PRICE[id];
@@ -478,13 +560,16 @@ function sendLine(){
   let grandTotal = 0;  
  
   const categories = [
-    { id: "light",   name: "光明燈",   price: PRICE.light   },
-    { id: "taisui",  name: "太歲",     price: PRICE.taisui  },
-    { id: "peace5M", name: "五大主斗", price: PRICE.peace5M },
-    { id: "peace6T", name: "平安年斗6000元", price: PRICE.peace6T },
-    { id: "peace5T", name: "平安年斗5000元", price: PRICE.peace5T },
-    { id: "peace3T", name: "平安年斗3000元", price: PRICE.peace3T },
-    { id: "peace1T", name: "平安年斗1000元", price: PRICE.peace1T },
+    { id: "light",     name: "光明燈",       price: PRICE.light     },
+    { id: "light500",  name: "光明燈_500元", price: PRICE.light500  },
+    { id: "taisui",    name: "太歲",         price: PRICE.taisui    },
+    { id: "taisui500", name: "太歲_500元",   price: PRICE.taisui500 },
+    { id: "petLight",  name: "寵物平安燈",   price: PRICE.petLight  },
+    { id: "peace5M",   name: "五大主斗",     price: PRICE.peace5M   },
+    { id: "peace6T",   name: "平安年斗6000元", price: PRICE.peace6T },
+    { id: "peace5T",   name: "平安年斗5000元", price: PRICE.peace5T },
+    { id: "peace3T",   name: "平安年斗3000元", price: PRICE.peace3T },
+    { id: "peace1T",   name: "平安年斗1000元", price: PRICE.peace1T },
   ];
 
   categories.forEach(cat => {
@@ -541,7 +626,7 @@ function sendLine(){
 
   alert("已開啟 LINE 確認訊息，請確認後傳送！\n同時資料正在背景存檔...");
 
-  // 背景送資料到 Sheet (將每個平安年斗獨立成一個欄位傳送)
+  // 背景送資料到 Sheet (將每個項目獨立成欄位傳送)
   let formData = new URLSearchParams();
   formData.append('contactName', contactNameVal);
   formData.append('phone', phoneVal);
@@ -558,6 +643,17 @@ function sendLine(){
   });
   formData.append('lightItems', lightItems);
 
+  let light500Items = '';
+  document.querySelectorAll("#light500 .item").forEach((item, idx) => {
+    const name = item.querySelector(".n")?.value?.trim();
+    const year = item.querySelector(".y")?.value?.trim();
+    const type = item.querySelector(".c")?.value?.trim() || item.querySelector(".t")?.value || '';
+    if (name && year) {
+      light500Items += `${idx+1}. ${name} 民國${year} ${gz(year)}【${type}】   `;
+    }
+  });
+  formData.append('light500Items', light500Items);
+
   let taisuiItems = '';
   document.querySelectorAll("#taisui .item").forEach((item, idx) => {
     const name = item.querySelector(".n")?.value?.trim();
@@ -567,6 +663,27 @@ function sendLine(){
     }
   });
   formData.append('taisuiItems', taisuiItems);
+
+  let taisui500Items = '';
+  document.querySelectorAll("#taisui500 .item").forEach((item, idx) => {
+    const name = item.querySelector(".n")?.value?.trim();
+    const year = item.querySelector(".y")?.value?.trim();
+    if (name && year) {
+      taisui500Items += `${idx+1}. ${name} 民國${year} ${gz(year)}   `;
+    }
+  });
+  formData.append('taisui500Items', taisui500Items);
+
+  let petLightItems = '';
+  document.querySelectorAll("#petLight .item").forEach((item, idx) => {
+    const name = item.querySelector(".n")?.value?.trim();
+    const year = item.querySelector(".y")?.value?.trim();
+    const species = item.querySelector(".c")?.value?.trim() || item.querySelector(".t")?.value || '';
+    if (name && year) {
+      petLightItems += `${idx+1}. ${name} 民國${year} ${gz(year)}【${species}】   `;
+    }
+  });
+  formData.append('petLightItems', petLightItems);
 
   let peace5MItems = '';
   document.querySelectorAll("#peace5M .item").forEach((item, idx) => {
